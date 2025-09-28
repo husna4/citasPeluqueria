@@ -40,9 +40,20 @@ public class CitaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CitaDto> obtenerCita(@PathVariable UUID id) {
+
         return citaService.getCitaById(id)
                 .map(c -> ResponseEntity.ok(modelMapper.map(c, CitaDto.class)))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/sin-atender")
+    public ResponseEntity<List<CitaDto>> obtenerCitasSinAtender() {
+
+        List<CitaDto> citasDto = citaService.getCitasSinAtender().stream()
+                .map(cita -> modelMapper.map(cita, CitaDto.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(citasDto);
     }
 
     @PostMapping

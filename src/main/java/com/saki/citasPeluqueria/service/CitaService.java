@@ -43,6 +43,10 @@ public class CitaService {
         return citaRepository.findAll();
     }
 
+    public List<Cita> getCitasSinAtender(){
+        return citaRepository.findByAtendidaOrderByFechaAscHoraAsc(false);
+    }
+
     public Optional<Cita> getCitaById(UUID id) {
         if(id == null) {
             return Optional.empty();

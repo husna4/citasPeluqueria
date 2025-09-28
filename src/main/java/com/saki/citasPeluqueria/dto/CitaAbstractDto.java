@@ -2,6 +2,7 @@ package com.saki.citasPeluqueria.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,6 +26,9 @@ public abstract class CitaAbstractDto {
     @NotNull(message = "{cita.cliente.requerido}")
     @Valid
     private ClienteDto cliente;
+
+    @Length(max = 1000)
+    private String observaciones;
 
     public LocalDate getFecha() {
         return fecha;
@@ -64,5 +68,13 @@ public abstract class CitaAbstractDto {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 }

@@ -1,7 +1,6 @@
 package com.saki.citasPeluqueria.dto;
 
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Set;
@@ -11,8 +10,7 @@ import java.util.Set;
  */
 
 public class CitaDto extends CitaAbstractDto {
-
-    @NotNull(message = "{cita.cortes.requerido}")
+//    @NotNull(message = "{cita.cortes.requerido}")
     @Size(min = 1, message = "{cita.cortes.minimo}")
     private Set<CorteDto> cortes;
 

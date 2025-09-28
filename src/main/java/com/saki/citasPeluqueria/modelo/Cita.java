@@ -3,7 +3,6 @@ package com.saki.citasPeluqueria.modelo;
 import com.saki.citasPeluqueria.converters.BooleanToIntegerConverter;
 import com.saki.citasPeluqueria.interfaces.ICita;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -27,7 +26,7 @@ public class Cita extends Identifiable implements ICita {
     @Convert(converter = BooleanToIntegerConverter.class)
     private boolean atendida;
 
-    @NotEmpty
+//    @NotEmpty
     @ManyToMany
     @JoinTable(name = "cita_corte",
         joinColumns = @JoinColumn(name = "idCita"),
@@ -42,6 +41,9 @@ public class Cita extends Identifiable implements ICita {
     @ManyToOne
     @JoinColumn(name = "idPeluquero", referencedColumnName = "id")
     private Peluquero peluqueriAsignado;
+
+    @Column(length = 1000)
+    private String observaciones;
 
     @Override
     public LocalDate getFecha() {
@@ -95,5 +97,13 @@ public class Cita extends Identifiable implements ICita {
 
     public void setAtendida(boolean atendida) {
         this.atendida = atendida;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 }

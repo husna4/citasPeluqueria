@@ -1,7 +1,5 @@
 package com.saki.citasPeluqueria.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -11,7 +9,7 @@ import java.util.UUID;
  */
 public class CitaCreateUpdateDto extends CitaAbstractDto {
 
-    @NotEmpty(message = "{cita.cortes.requerido}")
+//    @NotEmpty(message = "{cita.cortes.requerido}")
     private Set<UUID> idsCorte;
 
     private UUID idPeluqueroAsignado;
