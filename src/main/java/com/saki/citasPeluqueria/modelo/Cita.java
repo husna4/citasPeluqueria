@@ -35,7 +35,6 @@ public class Cita extends Identifiable implements ICita {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idCliente", referencedColumnName = "id")
-    @NotNull
     private Cliente cliente;
 
     @ManyToOne

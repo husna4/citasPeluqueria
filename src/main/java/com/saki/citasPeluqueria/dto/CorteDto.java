@@ -20,6 +20,8 @@ public class CorteDto {
         @NotNull(message = "{corte.error.precio.requerido}")
         private BigDecimal precio;
 
+        private int duracion = 0; // en minutos
+
         public UUID getId() {
                 return id;
         }
@@ -42,5 +44,13 @@ public class CorteDto {
 
         public void setPrecio(BigDecimal precio) {
                 this.precio = precio;
+        }
+
+        public int getDuracion() {
+                return duracion;
+        }
+
+        public void setDuracion(int duracion) {
+                this.duracion = duracion;
         }
 }

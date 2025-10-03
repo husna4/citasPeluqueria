@@ -2,7 +2,6 @@ package com.saki.citasPeluqueria.modelo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
@@ -11,8 +10,7 @@ import jakarta.validation.constraints.Size;
 @MappedSuperclass
 public abstract class Persona extends Identifiable {
     @Column(length = 50)
-    @Size(min = 1, max = 50)
-    @NotBlank
+    @Size(max = 50)
     protected String nombre;
 
     @Size(max = 16)

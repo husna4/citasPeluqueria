@@ -23,6 +23,9 @@ public class Corte extends Identifiable implements ICorte {
     @NotNull
     private BigDecimal precio;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int duracion = 0; // en minutos
+
     @Override
     public String getNombre() {
         return nombre;
@@ -41,5 +44,13 @@ public class Corte extends Identifiable implements ICorte {
     @Override
     public void setPrecio(BigDecimal precio) {
         this.precio = precio;
+    }
+
+    public int getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(int duracion) {
+        this.duracion = duracion;
     }
 }

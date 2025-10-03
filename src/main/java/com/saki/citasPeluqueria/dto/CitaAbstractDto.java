@@ -23,8 +23,8 @@ public abstract class CitaAbstractDto {
 
     private boolean atendida;
 
-    @NotNull(message = "{cita.cliente.requerido}")
-    @Valid
+//    @NotNull(message = "{cita.cliente.requerido}")
+//    @Valid
     private ClienteDto cliente;
 
     @Length(max = 1000)

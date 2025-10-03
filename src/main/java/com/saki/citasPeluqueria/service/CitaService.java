@@ -7,13 +7,17 @@ import com.saki.citasPeluqueria.modelo.Cita;
 import com.saki.citasPeluqueria.modelo.Cliente;
 import com.saki.citasPeluqueria.modelo.Corte;
 import com.saki.citasPeluqueria.repositorio.CitaRepository;
+import com.saki.citasPeluqueria.util.Util;
 import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author husnain
@@ -98,9 +102,12 @@ public class CitaService {
     }
 
     private void anaydirClienteACitaDesdeDto(Cita cita, CitaCreateUpdateDto citaDto) throws IllegalArgumentException {
-        if(citaDto.getCliente() == null)  {
-            throw new IllegalArgumentException(messageSource.getMessage("cita.cliente.requerido",
-                    null, Locale.getDefault()));
+        ClienteDto clienteDto = citaDto.getCliente();
+
+        if(clienteDto == null || (Util.isNullOrEmpty(clienteDto.getNombre()) &&
+                Util.isNullOrEmpty(clienteDto.getTfno()))) {
+            cita.setCliente(null);
+            return;
         }
 
         Cliente cliente = clienteService.getClienteById(citaDto.getCliente().getId())
