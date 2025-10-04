@@ -1,9 +1,11 @@
 package com.saki.citasPeluqueria.dto;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -26,6 +28,9 @@ public abstract class CitaAbstractDto {
 //    @NotNull(message = "{cita.cliente.requerido}")
 //    @Valid
     private ClienteDto cliente;
+
+    @Digits(integer = 10, fraction = 2, message = "{cita.precio.formato}")
+    private BigDecimal precio;
 
     @Length(max = 1000)
     private String observaciones;
@@ -76,5 +81,13 @@ public abstract class CitaAbstractDto {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
 }

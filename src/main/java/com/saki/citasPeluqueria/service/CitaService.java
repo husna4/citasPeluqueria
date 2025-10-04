@@ -1,5 +1,6 @@
 package com.saki.citasPeluqueria.service;
 
+import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
 import com.saki.citasPeluqueria.dto.ClienteDto;
 import com.saki.citasPeluqueria.exceptions.ObjectNotFoundException;
@@ -78,6 +79,7 @@ public class CitaService {
         cita.setFecha(citaDto.getFecha());
         cita.setHora(citaDto.getHora());
         cita.setAtendida(citaDto.isAtendida());
+        cita.setObservaciones(citaDto.getObservaciones());
 
         anyadirCortesACita(cita, citaDto);
         anaydirClienteACitaDesdeDto(cita, citaDto);
@@ -131,11 +133,12 @@ public class CitaService {
 
     }
 
-    public Cita atenderCita(@NotNull UUID idCita) throws ObjectNotFoundException {
+    public Cita atenderCita(@NotNull UUID idCita, @NotNull AtenderCitaRequestDto citaAtendidaDto) throws ObjectNotFoundException {
         Cita cita = citaRepository.findById(idCita).orElseThrow(() ->
                 new ObjectNotFoundException(messageSource, Cita.class.getSimpleName(), idCita));
 
         cita.setAtendida(true);
+        cita.setPrecio(citaAtendidaDto.getPrecio());
 
         return citaRepository.save(cita);
     }

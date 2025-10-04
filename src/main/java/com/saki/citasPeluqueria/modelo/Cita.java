@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class Cita extends Identifiable implements ICita {
     @ManyToOne
     @JoinColumn(name = "idPeluquero", referencedColumnName = "id")
     private Peluquero peluqueriAsignado;
+
+    @Column(precision = 5, scale = 2)
+    private BigDecimal precio;
 
     @Column(length = 1000)
     private String observaciones;
@@ -104,5 +108,13 @@ public class Cita extends Identifiable implements ICita {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
 }

@@ -1,5 +1,6 @@
 package com.saki.citasPeluqueria.controllers;
 
+import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
 import com.saki.citasPeluqueria.dto.CitaDto;
 import com.saki.citasPeluqueria.modelo.Cita;
@@ -88,8 +89,9 @@ public class CitaController {
     }
 
     @PutMapping("/{id}/atender")
-    public ResponseEntity<CitaDto> atenderCita(@PathVariable UUID id) {
-        Cita cita = citaService.atenderCita(id);
+    public ResponseEntity<CitaDto> atenderCita(@PathVariable UUID id,
+                                               @Valid @RequestBody AtenderCitaRequestDto citaAtendidaDto) {
+        Cita cita = citaService.atenderCita(id, citaAtendidaDto);
 
         if(cita == null) {
             return ResponseEntity.badRequest().build();
