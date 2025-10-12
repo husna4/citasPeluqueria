@@ -1,6 +1,8 @@
 package com.saki.citasPeluqueria.dataBuilder;
 
 import com.saki.citasPeluqueria.dto.CorteDto;
+import com.saki.citasPeluqueria.modelo.Corte;
+import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -80,12 +82,19 @@ public enum CorteDtoData {
 
     private final CorteDto corteDto;
 
+    private final ModelMapper modelMapper;
+
     CorteDtoData(CorteDto corteDto) {
         this.corteDto = corteDto;
+        modelMapper = new ModelMapper();
     }
 
     public CorteDto getCorteDto() {
         return corteDto;
+    }
+
+    public Corte getCorte() {
+        return modelMapper.map(corteDto, Corte.class);
     }
 
     public static class CorteDtoBuilder {

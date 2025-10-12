@@ -47,16 +47,23 @@ public class CitaValidationTest {
                 "cita.hora.requerida");
     }
 
-    @Test
+    /**
+     * @deprecated La restriccion de que tiene que haber un cliente se ha quitado. Pero se deja la prueba para futuros casos.
+     * Reemplazado por: testValidarCitaSinClienteAlCrearOModificarCita
+     */
     @DisplayName("Debe fallar cuando el cliente es null")
+    @Deprecated
     void testValidarClienteRequeridaAlCrearOModificarCita() {
         verificarValidacion(CitaUpdateCreateDtoData.SIN_CLIENTE,
                 1, NOMBRE_PROPIEDAD_CLIENTE_CITA,
                 "cita.cliente.requerido");
     }
 
-    @Test
-    @DisplayName("Debe fallar cuando nombre del cliente en una cita es null")
+    /**
+     * @deprecated La restriccion de que tiene que haber un nombre de cliente al crear la cita se ha quitado. Pero se deja la prueba para futuros casos.
+     */
+    @Deprecated
+    @DisplayName("Debe fallar cuando existe cliente en cita pero nombre del cliente es null")
     void testValidarNombreClienteRequeridaAlCrearOModificarCita() {
         verificarValidacion(CitaUpdateCreateDtoData.SIN_NOMBRE_CLIENTE,
                 1,
@@ -64,7 +71,10 @@ public class CitaValidationTest {
                 "cliente.nombre.requerido");
     }
 
-    @Test
+    /**
+     * @deprecated La restriccion de que tiene una cita tiene que tener cortes se ha quitado. Se el código de la prueba para futuros casos
+     */
+    @Deprecated
     @DisplayName("Debe fallar cuando la cita no tiene ningún id de corte")
     void testValidarIdCorteRequeridoAlCrearOModificarCita() {
         verificarValidacion(CitaUpdateCreateDtoData.SIN_CORTES,
@@ -79,17 +89,26 @@ public class CitaValidationTest {
 
         CitaCreateUpdateDto cita = CitaUpdateCreateDtoData.SIN_FECHA_HORA_CLIENTE_CORTES.getCitaDto();
 
-        int numViolationsEsperadas = 4;
-        String[] propiedadesConErrorEsperadas = {NOMBRE_PROPIEDAD_FECHA_CITA, NOMBRE_PROPIEDAD_HORA_CITA,
-        NOMBRE_PROPIEDAD_CLIENTE_CITA, NOMBRE_PROPIEDAD_IDS_CORTE};
+        String[] propiedadesConErrorEsperadas = {NOMBRE_PROPIEDAD_FECHA_CITA, NOMBRE_PROPIEDAD_HORA_CITA};
 
         Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
 
         assertThat(violations)
-                .hasSize(4)
+                .hasSize(propiedadesConErrorEsperadas.length)
                 .extracting(ConstraintViolation::getPropertyPath)
                 .extracting(Object::toString)
                 .containsOnly(propiedadesConErrorEsperadas);
+    }
+
+    @Test
+    @DisplayName("Se debe crear la cita sin cliente")
+    void testValidarCitaSinClienteAlCrearOModificarCita() {
+
+        CitaCreateUpdateDto cita = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
+
+        Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
+
+        assertThat(violations).hasSize(0);
     }
 
     @Test

@@ -40,7 +40,7 @@ public class Cita extends Identifiable implements ICita {
 
     @ManyToOne
     @JoinColumn(name = "idPeluquero", referencedColumnName = "id")
-    private Peluquero peluqueriAsignado;
+    private Peluquero peluqueroAsignado;
 
     @Column(precision = 5, scale = 2)
     private BigDecimal precio;
@@ -86,12 +86,12 @@ public class Cita extends Identifiable implements ICita {
         this.cliente = cliente;
     }
 
-    public Peluquero getPeluqueriAsignado() {
-        return peluqueriAsignado;
+    public Peluquero getPeluqueroAsignado() {
+        return peluqueroAsignado;
     }
 
-    public void setPeluqueriAsignado(Peluquero peluqueriAsignado) {
-        this.peluqueriAsignado = peluqueriAsignado;
+    public void setPeluqueroAsignado(Peluquero peluqueroAsignado) {
+        this.peluqueroAsignado = peluqueroAsignado;
     }
 
     public boolean isAtendida() {

@@ -2,6 +2,8 @@ package com.saki.citasPeluqueria.dataBuilder;
 
 
 import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.modelo.Cliente;
+import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
@@ -80,14 +82,21 @@ public enum ClienteDtoData {
             .setTfno("789123456")
             .build());
 
-    private ClienteDto clienteDto;
+    private final ClienteDto clienteDto;
+
+    private final ModelMapper modelMapper;
 
     ClienteDtoData(ClienteDto clienteDto) {
         this.clienteDto = clienteDto;
+        modelMapper = new ModelMapper();
     }
 
     public ClienteDto getClienteDto() {
         return clienteDto;
+    }
+
+    public Cliente getCliente() {
+        return modelMapper.map(clienteDto, Cliente.class);
     }
 
     public static class ClienteDtoBuilder {

@@ -88,7 +88,7 @@ public class CitaService {
             anaydirPeluqueroAsignadoACita(cita, citaDto);
         }
         else{
-           cita.setPeluqueriAsignado(null);
+           cita.setPeluqueroAsignado(null);
         }
 
         return citaRepository.save(cita);
@@ -106,30 +106,21 @@ public class CitaService {
     private void anaydirClienteACitaDesdeDto(Cita cita, CitaCreateUpdateDto citaDto) throws IllegalArgumentException {
         ClienteDto clienteDto = citaDto.getCliente();
 
-        if(clienteDto == null || (Util.isNullOrEmpty(clienteDto.getNombre()) &&
-                Util.isNullOrEmpty(clienteDto.getTfno()))) {
+        if (clienteDto == null || (Util.isNullOrEmpty(clienteDto.getNombre()) &&
+                Util.isNullOrEmpty(clienteDto.getTfno()) && clienteDto.getId() == null)) {
             cita.setCliente(null);
             return;
         }
 
         Cliente cliente = clienteService.getClienteById(citaDto.getCliente().getId())
-                .orElseGet(() -> crearYObtenerNuevaInstanciaCliente(citaDto.getCliente()));
+                .orElseGet(() -> clienteService.crearClienteDesdeDto(citaDto.getCliente()));
 
         cita.setCliente(cliente);
     }
 
-    private Cliente crearYObtenerNuevaInstanciaCliente(ClienteDto clienteDto) {
-        Cliente cliente = new Cliente();
-
-        cliente.setNombre(clienteDto.getNombre());
-        cliente.setTfno(clienteDto.getTfno());
-
-        return cliente;
-    }
-
     private void anaydirPeluqueroAsignadoACita(Cita cita, CitaCreateUpdateDto citaDto) {
         peluqueroService.getPeluqueroById(citaDto.getIdPeluqueroAsignado())
-                .ifPresent(cita::setPeluqueriAsignado);
+                .ifPresent(cita::setPeluqueroAsignado);
 
     }
 

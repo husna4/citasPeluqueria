@@ -3,11 +3,9 @@ package com.saki.citasPeluqueria.modelo;
 import com.saki.citasPeluqueria.dataBuilder.CitaUpdateCreateDtoData;
 import com.saki.citasPeluqueria.dataBuilder.ClienteDtoData;
 import com.saki.citasPeluqueria.dataBuilder.CorteDtoData;
-import com.saki.citasPeluqueria.dataBuilder.PeluqueroDtoData;
+import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
 import com.saki.citasPeluqueria.dto.ClienteDto;
-import com.saki.citasPeluqueria.dto.CorteDto;
-import com.saki.citasPeluqueria.exceptions.ObjectNotFoundException;
 import com.saki.citasPeluqueria.repositorio.CitaRepository;
 import com.saki.citasPeluqueria.service.CitaService;
 import com.saki.citasPeluqueria.service.ClienteService;
@@ -20,10 +18,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,10 +36,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
 public class CitaServiceTest {
-
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Mock
     private ModelMapper modelMapperMock;
 
@@ -66,79 +60,60 @@ public class CitaServiceTest {
     @Test
     @DisplayName("Crear cita creando nuevo cliente")
     void crearCita_ClienteNoExistente_DeberiaCrearNuevoCliente() {
-        CorteDto corteDto = CorteDtoData.VALIDO_CLASICO.getCorteDto();
-
-        Corte corte = modelMapper.map(corteDto, Corte.class);
-        Peluquero peluquero = modelMapper.map(PeluqueroDtoData.VALIDO_ANA.getPeluqueroDto(), Peluquero.class);
         CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE.getCitaDto();
-        Cita cita = modelMapper.map(citaDto, Cita.class);
+        Cita cita = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE.getCita();
 
         when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
-        when(corteService.getCorteByIds(anyList())).thenReturn(Collections.singletonList(corte));
         when(clienteService.getClienteById(cita.getCliente().getId())).thenReturn(Optional.empty()); // debería crear cliente nuevo
-        when(peluqueroService.getPeluqueroById(citaDto.getIdPeluqueroAsignado())).thenReturn(Optional.of(peluquero));
         when(citaRepository.save(any(Cita.class))).thenReturn(cita);
 
         Cita resultado = citaService.crearCita(citaDto);
 
-        // Then
         assertNotNull(resultado);
         assertEquals(cita.getId(), resultado.getId());
-        assertNotNull(resultado.getCliente());
-        assertEquals(cita.getCliente().getNombre(), resultado.getCliente().getNombre());
-        assertNotNull(resultado.getPeluqueriAsignado());
-        assertEquals(cita.getPeluqueriAsignado().getNombre(), resultado.getPeluqueriAsignado().getNombre());
 
-
-        verify(corteService).getCorteByIds(anyList());
         verify(clienteService).getClienteById(citaDto.getCliente().getId());
-        verify(peluqueroService).getPeluqueroById(citaDto.getIdPeluqueroAsignado());
+        verify(clienteService).crearClienteDesdeDto(citaDto.getCliente());
         verify(citaRepository).save(any(Cita.class));
     }
 
     @Test
     @DisplayName("Crear nueva cita obteniendo cliente de la BD")
-    void crearCita_ClienteNoExistente_NoDeberiaCrearNuevoCliente() {
-        CorteDto corteDto = CorteDtoData.VALIDO_CLASICO.getCorteDto();
+    void crearCita_ClienteExistente_NoDeberiaCrearNuevoCliente() {
+        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData
+                .VALIDA_CON_PELUQUERO_CON_ID_CLIENTE.getCitaDto();
 
-        Corte corte = modelMapper.map(corteDto, Corte.class);
-        Peluquero peluquero = modelMapper.map(PeluqueroDtoData.VALIDO_ANA.getPeluqueroDto(), Peluquero.class);
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_CON_ID_CLIENTE.getCitaDto();
-        Cita cita = modelMapper.map(citaDto, Cita.class);
-        ClienteDto clienteDto = ClienteDtoData.VALIDO_JUAN_CON_ID.getClienteDto();
-        Cliente cliente = modelMapper.map(clienteDto, Cliente.class);
+        Cita citaEsperada = CitaUpdateCreateDtoData
+                .VALIDA_CON_PELUQUERO_CON_ID_CLIENTE.getCita();
 
-        cita.getCliente().setNombre(null); // Quitamos el nombre del cliente para ver luego que se obtiene de la BD
+        Cliente clienteExistente = ClienteDtoData.VALIDO_JUAN_CON_ID.getCliente();
 
-        when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
-        when(corteService.getCorteByIds(anyList())).thenReturn(Collections.singletonList(corte));
-        when(clienteService.getClienteById(cita.getCliente().getId())).thenReturn(Optional.ofNullable(cliente));
-        when(peluqueroService.getPeluqueroById(citaDto.getIdPeluqueroAsignado())).thenReturn(Optional.of(peluquero));
-        when(citaRepository.save(any(Cita.class))).thenReturn(cita);
+        when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(citaEsperada);
+        when(clienteService.getClienteById(citaEsperada.getCliente().getId()))
+                .thenReturn(Optional.of(clienteExistente));
+        when(citaRepository.save(any(Cita.class))).thenReturn(citaEsperada);
 
         Cita resultado = citaService.crearCita(citaDto);
 
         assertNotNull(resultado);
-        assertEquals(cita.getId(), resultado.getId());
         assertNotNull(resultado.getCliente());
-        assertEquals(clienteDto.getNombre(), resultado.getCliente().getNombre());
-        assertNotNull(resultado.getPeluqueriAsignado());
-        assertEquals(cita.getPeluqueriAsignado().getNombre(), resultado.getPeluqueriAsignado().getNombre());
+        assertEquals(clienteExistente.getId(), resultado.getCliente().getId());
 
-        verify(corteService).getCorteByIds(anyList());
-        verify(clienteService).getClienteById(clienteDto.getId());
-        verify(peluqueroService).getPeluqueroById(citaDto.getIdPeluqueroAsignado());
+        verify(clienteService).getClienteById(citaDto.getCliente().getId());
+        verify(clienteService, never()).crearClienteDesdeDto(any());
         verify(citaRepository).save(any(Cita.class));
     }
 
-    @Test
+    /**
+     * @deprecated La restriccion de que tiene que haber un cliente se ha quitado. Pero se deja la prueba para futuros casos
+     */
+    @Deprecated
     @DisplayName("Error al crear cita sin cliente")
     void crearCita_SinCliente_DeberiaLanzarExcepcion() {
-        CorteDto corteDto = CorteDtoData.VALIDO_CLASICO.getCorteDto();
-
-        Corte corte = modelMapper.map(corteDto, Corte.class);
+        Corte corte = CorteDtoData.VALIDO_CLASICO.getCorte();
         CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
-        Cita cita = modelMapper.map(citaDto, Cita.class);
+        Cita cita = CitaUpdateCreateDtoData.SIN_CLIENTE.getCita();
+
         String mensajeMock = "El cliente es obligatorio para crear la cita";
 
         when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
@@ -155,57 +130,123 @@ public class CitaServiceTest {
     }
 
     @Test
-    @DisplayName("Modificar la cita creando un nuevo cliente con éxito")
-    void modificarCita_ConDatosValidos_DeberiaModificarCita_creandoNuevoCliente() {
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCitaDto();
-        Cita cita = modelMapper.map(citaDto, Cita.class);
-        List<Corte> cortes = new ArrayList<>();
-        UUID idCitaAModifcar = citaDto.getId();
+    @DisplayName("Crear cita sin cliente sin errores esperados")
+    void crearCita_SinCliente_SinErroresEsperados() {
+        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
+        Cita cita =  CitaUpdateCreateDtoData.SIN_CLIENTE.getCita();
 
-        cortes.add(modelMapper.map(CorteDtoData.VALIDO_ECONOMICO.getCorteDto(), Corte.class));
-        cortes.add(modelMapper.map(CorteDtoData.VALIDO_BARBA.getCorteDto(), Corte.class));
+        when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
+        when(citaRepository.save(any(Cita.class))).thenReturn(cita);
 
-        when(citaRepository.findById(idCitaAModifcar)).thenReturn(Optional.of(cita));
-        when(corteService.getCorteByIds(anyList())).thenReturn(cortes);
-        when(citaRepository.save(cita)).thenReturn(cita);
-        when(clienteService.getClienteById(cita.getCliente().getId())).thenReturn(Optional.empty());
-
-        Cita resultado = citaService.modificarCita(idCitaAModifcar, citaDto);
+        Cita resultado = citaService.crearCita(citaDto);
 
         assertNotNull(resultado);
-        assertEquals(citaDto.getFecha(), resultado.getFecha());
-        assertEquals(citaDto.getHora(), resultado.getHora());
-        assertNotNull(citaDto.getCliente());
-        assertEquals(citaDto.getCliente().getNombre(), resultado.getCliente().getNombre());
-        assertNotNull(resultado.getCortes());
-        assertEquals(2, resultado.getCortes().size());
+        assertNull(resultado.getCliente());
 
-        verify(citaRepository).findById(citaDto.getId());
-        verify(corteService).getCorteByIds(anyList());
-        verify(citaRepository).save(cita);
-        verify(clienteService).getClienteById(cita.getCliente().getId());
+        verify(citaRepository).save(any());
+        verify(clienteService, never()).getClienteById(any());
+        verify(clienteService, never()).crearClienteDesdeDto(any(ClienteDto.class));
     }
 
     @Test
-    @DisplayName("Error al modificar cliente sin id")
-    void modificarCita_SinId_DeberiaLanzarExcepcion() {
+    @DisplayName("Modificar cita creando un nuevo cliente")
+    void modificarCita_ConClienteNoExistente_DeberiaModificarYCrearCliente() {
+        Cita citaAnterior = CitaUpdateCreateDtoData
+                .VALIDA_CON_PELUQUERO_SIN_CLIENTE_CON_ID.getCita();
+        UUID idCitaAModificar = citaAnterior.getId();
+
+        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData
+                .VALIDA_PARA_MODIFICAR_1.getCitaDto();
+        citaDto.setId(idCitaAModificar);
+
+        Cita citaModificada = CitaUpdateCreateDtoData
+                .VALIDA_PARA_MODIFICAR_1.getCita();
+        citaModificada.setId(idCitaAModificar);
+
+        List<Corte> cortesEsperadas = List.of(
+                CorteDtoData.VALIDO_ECONOMICO.getCorte(),
+                CorteDtoData.VALIDO_BARBA.getCorte()
+        );
+
+        Cliente clienteNuevo = new Cliente();
+        clienteNuevo.setNombre(citaDto.getCliente().getNombre());
+        clienteNuevo.setTfno(citaDto.getCliente().getTfno());
+
+        when(citaRepository.findById(idCitaAModificar))
+                .thenReturn(Optional.of(citaAnterior));
+
+        when(clienteService.getClienteById(citaDto.getCliente().getId()))
+                .thenReturn(Optional.empty());
+
+        when(clienteService.crearClienteDesdeDto(any(ClienteDto.class)))
+                .thenReturn(clienteNuevo);
+
+        when(corteService.getCorteByIds(citaDto.getIdsCorte().stream().toList()))
+                .thenReturn(cortesEsperadas);
+
+        when(citaRepository.save(any(Cita.class)))
+                .thenReturn(citaModificada);
+
+        Cita resultado = citaService.modificarCita(idCitaAModificar, citaDto);
+
+        assertNotNull(resultado);
+
+        verify(citaRepository).findById(idCitaAModificar);
+        verify(clienteService).getClienteById(citaDto.getCliente().getId());
+        verify(clienteService).crearClienteDesdeDto(any(ClienteDto.class));
+        verify(corteService).getCorteByIds(citaDto.getIdsCorte().stream().toList());
+
+        verify(citaRepository).save(argThat(citaGuardada ->
+                citaGuardada.getId().equals(idCitaAModificar) &&
+                        citaGuardada.getFecha().equals(citaDto.getFecha()) &&
+                        citaGuardada.getHora().equals(citaDto.getHora()) &&
+                        citaGuardada.getCliente() != null &&
+                        citaGuardada.getCliente().getNombre().equals(clienteNuevo.getNombre()) &&
+                        citaGuardada.getCliente().getTfno().equals(clienteNuevo.getTfno()) &&
+                        citaGuardada.getCortes().size() == citaDto.getIdsCorte().size() &&
+                        citaGuardada.getPeluqueroAsignado() == null
+        ));
+    }
+
+    @Test
+    @DisplayName("Modificar cita sin crear cliente (cliente ya existe)")
+    void modificarCita_ConClienteExistente_NoDeberiaCrearNuevoCliente() {
         CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCitaDto();
-        String mensajeErrorEsperado = "No se ha podido encontrar cita con id " + citaDto.getId();
-        UUID idCitaAModifcar = citaDto.getId();
+        Cita citaEsperada = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCita();
+        Cliente clienteExistente = ClienteDtoData.VALIDO_JUAN_CON_ID.getCliente();
 
-        when(citaRepository.findById(idCitaAModifcar)).thenReturn(Optional.empty());
-        when(messageSource.getMessage("objeto.no.encontrado",
-                new Object[]{Cita.class.getSimpleName(), citaDto.getId()},
-                Locale.getDefault())).thenReturn(mensajeErrorEsperado);
+        when(citaRepository.findById(citaDto.getId())).thenReturn(Optional.of(citaEsperada));
+        when(clienteService.getClienteById(citaDto.getCliente().getId()))
+                .thenReturn(Optional.of(clienteExistente));
+        when(citaRepository.save(any(Cita.class))).thenReturn(citaEsperada);
 
-        ObjectNotFoundException exception =
-                assertThrows(ObjectNotFoundException.class, () -> citaService.modificarCita(idCitaAModifcar, citaDto));
+        Cita resultado = citaService.modificarCita(citaDto.getId(), citaDto);
 
-        assertEquals(mensajeErrorEsperado, exception.getMessage());
+        assertNotNull(resultado);
+        verify(clienteService).getClienteById(citaDto.getCliente().getId());
+        verify(clienteService, never()).crearClienteDesdeDto(any());
+        verify(citaRepository).save(any(Cita.class));
+    }
 
-        verify(citaRepository).findById(citaDto.getId());
-        verify(citaRepository, never()).save(any());
-        verify(messageSource).getMessage("objeto.no.encontrado",
-                new Object[]{Cita.class.getSimpleName(), citaDto.getId()}, Locale.getDefault());
+    @Test
+    @DisplayName("Se atender una cita con exito")
+    void atenderCita_DeberiaAtenderCita() {
+        AtenderCitaRequestDto atenderCitaRequestDto = new AtenderCitaRequestDto();
+        atenderCitaRequestDto.setPrecio(new BigDecimal("10.00"));
+
+        Cita cita = CitaUpdateCreateDtoData.VALIDA.getCita();
+
+        when(citaRepository.findById(cita.getId())).thenReturn(Optional.of(cita));
+        when(citaRepository.save(cita)).thenReturn(cita);
+
+        Cita resultadoSaveCita = citaService.atenderCita(cita.getId(), atenderCitaRequestDto);
+
+        assertNotNull(resultadoSaveCita);
+        assertTrue(resultadoSaveCita.isAtendida());
+        assertNotNull(resultadoSaveCita.getPrecio());
+        assertEquals(atenderCitaRequestDto.getPrecio(), resultadoSaveCita.getPrecio());
+
+        verify(citaRepository).findById(cita.getId());
+        verify(citaRepository).save(cita);
     }
 }

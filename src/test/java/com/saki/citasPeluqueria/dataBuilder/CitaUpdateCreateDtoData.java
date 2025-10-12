@@ -2,6 +2,8 @@ package com.saki.citasPeluqueria.dataBuilder;
 
 import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
 import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.modelo.Cita;
+import org.modelmapper.ModelMapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -63,8 +65,26 @@ public enum CitaUpdateCreateDtoData {
             .setCliente(ClienteDtoData.VALIDO_SIN_ID.getClienteDto())
             .build()),
 
+    VALIDA_PARA_MODIFICAR_2_CON_ID_CLIENTE(new CitaUpdateCreateDtoBuilder()
+            .setId(UUID.randomUUID())
+            .setFecha(LocalDate.now().plusDays(1))
+            .setHora(LocalTime.of(10, 0))
+            .anyadirIdCorteACita(CorteDtoData.VALIDO_ECONOMICO.getCorteDto().getId())
+            .anyadirIdCorteACita(CorteDtoData.VALIDO_BARBA.getCorteDto().getId())
+            .setCliente(ClienteDtoData.VALIDO_JUAN_CON_ID.getClienteDto())
+            .build()),
+
 
     VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE(new CitaUpdateCreateDtoBuilder()
+            .setFecha(LocalDate.now().plusDays(1))
+            .setHora(LocalTime.of(10, 0))
+            .anyadirIdCorteACita(CorteDtoData.VALIDO_CLASICO.getCorteDto().getId())
+            .setCliente(ClienteDtoData.VALIDO_SIN_ID.getClienteDto())
+            .setIdPeluqueroAsignado(PeluqueroDtoData.VALIDO_ANA.getPeluqueroDto().getId())
+            .build()),
+
+    VALIDA_CON_PELUQUERO_SIN_CLIENTE_CON_ID(new CitaUpdateCreateDtoBuilder()
+            .setId(UUID.randomUUID())
             .setFecha(LocalDate.now().plusDays(1))
             .setHora(LocalTime.of(10, 0))
             .anyadirIdCorteACita(CorteDtoData.VALIDO_CLASICO.getCorteDto().getId())
@@ -82,12 +102,19 @@ public enum CitaUpdateCreateDtoData {
 
     private CitaCreateUpdateDto citaDto;
 
+    private ModelMapper modelMapper;
+
     CitaUpdateCreateDtoData(CitaCreateUpdateDto citaDto) {
         this.citaDto = citaDto;
+        modelMapper = new ModelMapper();
     }
 
     public CitaCreateUpdateDto getCitaDto() {
         return citaDto;
+    }
+
+    public Cita getCita(){
+        return modelMapper.map(citaDto, Cita.class);
     }
 
     public static class CitaUpdateCreateDtoBuilder {

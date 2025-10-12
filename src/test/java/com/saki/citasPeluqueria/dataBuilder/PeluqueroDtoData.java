@@ -1,6 +1,8 @@
 package com.saki.citasPeluqueria.dataBuilder;
 
 import com.saki.citasPeluqueria.dto.PeluqueroDto;
+import com.saki.citasPeluqueria.modelo.Peluquero;
+import org.modelmapper.ModelMapper;
 
 import java.util.UUID;
 
@@ -63,12 +65,19 @@ public enum PeluqueroDtoData {
 
     private final PeluqueroDto peluqueroDto;
 
+    private final ModelMapper modelMapper;
+
     PeluqueroDtoData(PeluqueroDto peluqueroDto) {
         this.peluqueroDto = peluqueroDto;
+        modelMapper = new ModelMapper();
     }
 
     public PeluqueroDto getPeluqueroDto() {
         return peluqueroDto;
+    }
+
+    public Peluquero getPeluquero() {
+        return modelMapper.map(peluqueroDto, Peluquero.class);
     }
 
     public static class PeluqueroDtoBuilder {
