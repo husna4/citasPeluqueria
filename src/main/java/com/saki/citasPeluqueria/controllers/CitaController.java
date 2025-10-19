@@ -50,7 +50,17 @@ public class CitaController {
     @GetMapping("/sin-atender")
     public ResponseEntity<List<CitaDto>> obtenerCitasSinAtender() {
 
-        List<CitaDto> citasDto = citaService.getCitasSinAtender().stream()
+        List<CitaDto> citasDto = citaService.getCitasByAtendia(false).stream()
+                .map(cita -> modelMapper.map(cita, CitaDto.class))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(citasDto);
+    }
+
+    @GetMapping("/atendidas")
+    public ResponseEntity<List<CitaDto>> obtenerCitasAtendidas() {
+
+        List<CitaDto> citasDto = citaService.getCitasByAtendia(true).stream()
                 .map(cita -> modelMapper.map(cita, CitaDto.class))
                 .collect(Collectors.toList());
 

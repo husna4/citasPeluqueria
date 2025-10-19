@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Citas - Sistema de Citas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+    <script src="../js/notifications.js"></script>
+    <script src="../js/historial.js"></script>
+</head>
+<body>
+    <!-- Navegación principal -->
+    <header class="main-header">
+        <nav class="header-nav">
+            <a href="../index.html" class="nav-brand">
+                <span>✂️</span>
+                <span>Sistema de Citas</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html" class="nav-link">🏠 Inicio</a></li>
+                <li><a href="historial.html" class="nav-link active">📅 Historial</a></li>
+                <li><a href="#" class="nav-link" style="opacity: 0.5; cursor: not-allowed;">✂️ Servicios</a></li>
+            </ul>
+            
+            <button class="nav-toggle" id="navToggle" onclick="toggleMenu()">☰</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <header class="header">
+            <h1>📅 Historial de Citas</h1>
+            <p>Visualiza todas las citas atendidas</p>
+        </header>
+
+        <div class="actions-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar en historial..." onkeyup="searchAppointments()">
+            </div>
+            <div style="display: flex; gap: 1rem;">
+                <select id="dateRangeFilter" onchange="filterByDateRange()" style="padding: 0.75rem; border: 2px solid #ddd; border-radius: 6px; font-size: 1rem;">
+                    <option value="all">Todas las fechas</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Última semana</option>
+                    <option value="month">Último mes</option>
+                    <option value="custom">Rango personalizado</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Rango de fechas personalizado -->
+        <div id="customDateRange" class="custom-date-range" style="display: none;">
+            <div style="display: flex; gap: 1rem; align-items: center; background: white; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <label style="font-weight: 600;">Desde:</label>
+                <input type="date" id="dateFrom" onchange="applyCustomDateRange()">
+                <label style="font-weight: 600;">Hasta:</label>
+                <input type="date" id="dateTo" onchange="applyCustomDateRange()">
+                <button class="btn btn-secondary" onclick="clearCustomRange()" style="padding: 0.5rem 1rem;">Limpiar</button>
+            </div>
+        </div>
+
+        <!-- Estadísticas -->
+        <div id="statsContainer" class="stats-container" style="display: none;">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalCitas">0</div>
+                    <div class="stat-label">Total Citas</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="totalIngresos">0 €</div>
+                    <div class="stat-label">Ingresos Total</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-info">
+                    <div class="stat-value" id="promedioPrecio">0 €</div>
+                    <div class="stat-label">Precio Promedio</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Cargando historial...</p>
+        </div>
+
+        <div id="appointmentsContainer" class="appointments-grid">
+            <!-- Las citas se cargarán dinámicamente aquí -->
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📅</div>
+            <h3>No hay citas en el historial</h3>
+            <p id="emptyStateMessage">No se encontraron citas atendidas</p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

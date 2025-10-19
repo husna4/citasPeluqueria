@@ -1,0 +1,383 @@
+/* notifications.css */
+/* Sistema de notificaciones reutilizable */
+
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    min-width: 300px;
+    max-width: 500px;
+    animation: slideIn 0.3s ease forwards;
+}
+
+.notification.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.notification-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    flex: 1;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.notification-close:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+/* Tipos de notificaciones */
+.notification-success {
+    border-left: 4px solid #28a745;
+}
+
+.notification-error {
+    border-left: 4px solid #dc3545;
+}
+
+.notification-info {
+    border-left: 4px solid #17a2b8;
+}
+
+.notification-warning {
+    border-left: 4px solid #ffc107;
+}
+
+/* Animaciones */
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Apilar múltiples notificaciones */
+.notification:nth-child(2) {
+    top: 100px;
+}
+
+.notification:nth-child(3) {
+    top: 180px;
+}
+
+.notification:nth-child(4) {
+    top: 260px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        top: 10px !important;
+    }
+    
+    .notification:nth-child(2) {
+        top: 90px !important;
+    }
+    
+    .notification:nth-child(3) {
+        top: 170px !important;
+    }
+    
+    .notification:nth-child(4) {
+        top: 250px !important;
+    }
+    
+    .confirm-modal {
+        margin: 1rem;
+        width: calc(100% - 2rem);
+    }
+}
+
+/* Modal de confirmación */
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.confirm-overlay.show {
+    opacity: 1;
+}
+
+.confirm-modal {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-width: 500px;
+    width: 90%;
+    transform: scale(0.7);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow: hidden;
+}
+
+.confirm-modal.show {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.confirm-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.confirm-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.confirm-body {
+    padding: 2rem;
+}
+
+.confirm-body p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #555;
+}
+
+.confirm-footer {
+    padding: 1.5rem 2rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.btn-confirm-cancel,
+.btn-confirm-accept {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-confirm-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-confirm-cancel:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.btn-confirm-accept {
+    background: #667eea;
+    color: white;
+}
+
+.btn-confirm-accept:hover {
+    background: #5a6fd8;
+    transform: translateY(-1px);
+}
+
+/* Tipos de modal */
+.confirm-modal-danger .confirm-header {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.confirm-modal-danger .confirm-header h3 {
+    color: white;
+}
+
+.confirm-modal-danger .btn-confirm-accept {
+    background: #dc3545;
+}
+
+.confirm-modal-danger .btn-confirm-accept:hover {
+    background: #c82333;
+}
+
+.confirm-modal-warning .confirm-header {
+    background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+    color: #333;
+    border-bottom: none;
+}
+
+.confirm-modal-info .confirm-header {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.confirm-modal-info .confirm-header h3 {
+    color: white;
+}
+
+/* Estilos específicos para el diálogo de precio */
+.price-dialog-modal {
+    max-width: 450px;
+}
+
+.price-dialog-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.info-value {
+    color: #333;
+    font-weight: 500;
+}
+
+.price-input-group {
+    margin-top: 1.5rem;
+}
+
+.price-input-group label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.price-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.price-input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    transition: border-color 0.2s ease;
+}
+
+.price-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.price-input.error {
+    border-color: #dc3545;
+    animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.price-currency {
+    position: absolute;
+    right: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #667eea;
+    pointer-events: none;
+}
+
+.price-hint {
+    display: block;
+    margin-top: 0.5rem;
+    color: #999;
+    font-size: 0.875rem;
+}
+
+/* Tema oscuro (opcional) */
+@media (prefers-color-scheme: dark) {
+    .notification {
+        background: #2d2d2d;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    
+    .notification-message {
+        color: #e0e0e0;
+    }
+    
+    .notification-close {
+        color: #999;
+    }
+    
+    .notification-close:hover {
+        background: #404040;
+        color: #fff;
+    }
+}

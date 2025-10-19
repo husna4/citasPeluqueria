@@ -44,12 +44,12 @@ public class CitaService {
     @Autowired
     private MessageSource messageSource;
 
-    public List<Cita> getCitas(){
+    public List<Cita> getCitas() {
         return citaRepository.findAll();
     }
 
-    public List<Cita> getCitasSinAtender(){
-        return citaRepository.findByAtendidaOrderByFechaAscHoraAsc(false);
+    public List<Cita> getCitasByAtendia(boolean atendida) {
+        return citaRepository.findByAtendidaOrderByFechaAscHoraAsc(atendida);
     }
 
     public Optional<Cita> getCitaById(UUID id) {
