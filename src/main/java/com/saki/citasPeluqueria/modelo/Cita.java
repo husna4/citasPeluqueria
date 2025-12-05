@@ -1,9 +1,10 @@
 package com.saki.citasPeluqueria.modelo;
 
 import com.saki.citasPeluqueria.converters.BooleanToIntegerConverter;
-import com.saki.citasPeluqueria.interfaces.ICita;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -14,9 +15,12 @@ import java.util.Set;
 /**
  * @author husnain
  */
+
+@Getter
+@Setter
 @Entity
 @Table
-public class Cita extends Identifiable implements ICita {
+public class Cita extends Identifiable {
     @NotNull
     private LocalDate fecha;
 
@@ -27,7 +31,6 @@ public class Cita extends Identifiable implements ICita {
     @Convert(converter = BooleanToIntegerConverter.class)
     private boolean atendida;
 
-//    @NotEmpty
     @ManyToMany
     @JoinTable(name = "cita_corte",
         joinColumns = @JoinColumn(name = "idCita"),
@@ -47,74 +50,4 @@ public class Cita extends Identifiable implements ICita {
 
     @Column(length = 1000)
     private String observaciones;
-
-    @Override
-    public LocalDate getFecha() {
-        return fecha;
-    }
-
-    @Override
-    public void setFecha(LocalDate fecha) {
-        this.fecha = fecha;
-    }
-
-    @Override
-    public LocalTime getHora() {
-        return hora;
-    }
-
-    @Override
-    public void setHora(LocalTime hora) {
-        this.hora = hora;
-    }
-
-    @Override
-    public Set<Corte> getCortes() {
-        return cortes;
-    }
-
-    @Override
-    public void setCortes(Set<Corte> cortes) {
-        this.cortes = cortes;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public Peluquero getPeluqueroAsignado() {
-        return peluqueroAsignado;
-    }
-
-    public void setPeluqueroAsignado(Peluquero peluqueroAsignado) {
-        this.peluqueroAsignado = peluqueroAsignado;
-    }
-
-    public boolean isAtendida() {
-        return atendida;
-    }
-
-    public void setAtendida(boolean atendida) {
-        this.atendida = atendida;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(BigDecimal precio) {
-        this.precio = precio;
-    }
 }

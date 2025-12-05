@@ -1,11 +1,11 @@
 package com.saki.citasPeluqueria.modelo;
 
-import com.saki.citasPeluqueria.interfaces.IIdenifiable;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-
-import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author Husnain
@@ -13,18 +13,11 @@ import java.util.UUID;
 
 
 @MappedSuperclass
-public abstract class Identifiable implements IIdenifiable {
-    @GeneratedValue
+@Getter
+@Setter
+public abstract class Identifiable {
+
     @Id
-    private UUID id;
-
-    @Override
-    public UUID getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 }

@@ -1,34 +1,33 @@
 package com.saki.citasPeluqueria.dto;
 
 
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author husnain
  */
 
-public class CitaDto extends CitaAbstractDto {
-//    @NotNull(message = "{cita.cortes.requerido}")
-    @Size(min = 1, message = "{cita.cortes.minimo}")
+@Getter
+@Setter
+public class CitaDto {
+    private Long id;
+    private LocalDate fecha;
+    private LocalTime hora;
+    private boolean atendida;
+    private ClienteDto cliente;
+    private BigDecimal precio;
+    private String observaciones;
     private Set<CorteDto> cortes;
-
     private PeluqueroDto peluqueroAsignado;
-
-    public Set<CorteDto> getCortes() {
-        return cortes;
-    }
-
-    public void setCortes(Set<CorteDto> cortes) {
-        this.cortes = cortes;
-    }
-
-    public PeluqueroDto getPeluqueroAsignado() {
-        return peluqueroAsignado;
-    }
-
-    public void setPeluqueroAsignado(PeluqueroDto peluqueroAsignado) {
-        this.peluqueroAsignado = peluqueroAsignado;
-    }
 }

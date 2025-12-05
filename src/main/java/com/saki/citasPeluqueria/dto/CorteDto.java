@@ -3,6 +3,8 @@ package com.saki.citasPeluqueria.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -10,47 +12,18 @@ import java.util.UUID;
 /**
  * @author husnain
  */
+
+@Getter
+@Setter
 public class CorteDto {
-        private UUID id;
+    private UUID id;
 
-        @NotBlank(message = "{corte.error.nombre.requerido}")
-        @Size(max = 50)
-        private String nombre;
+    @NotBlank(message = "{corte.error.nombre.requerido}")
+    @Size(max = 50)
+    private String nombre;
 
-        @NotNull(message = "{corte.error.precio.requerido}")
-        private BigDecimal precio;
+    @NotNull(message = "{corte.error.precio.requerido}")
+    private BigDecimal precio;
 
-        private int duracion = 0; // en minutos
-
-        public UUID getId() {
-                return id;
-        }
-
-        public void setId(UUID id) {
-                this.id = id;
-        }
-
-        public String getNombre() {
-                return nombre;
-        }
-
-        public void setNombre(String nombre) {
-                this.nombre = nombre;
-        }
-
-        public BigDecimal getPrecio() {
-                return precio;
-        }
-
-        public void setPrecio(BigDecimal precio) {
-                this.precio = precio;
-        }
-
-        public int getDuracion() {
-                return duracion;
-        }
-
-        public void setDuracion(int duracion) {
-                this.duracion = duracion;
-        }
+    private int duracion = 0; // en minutos
 }

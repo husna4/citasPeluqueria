@@ -1,28 +1,14 @@
 package com.saki.citasPeluqueria.dto;
 
 import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.UUID;
 
+@Getter
+@Setter
 public class PersonaDto {
-    private UUID id;
-
-    @Size(max = 16)
+    private Long id;
     private String tfno;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getTfno() {
-        return tfno;
-    }
-
-    public void setTfno(String tfno) {
-        this.tfno = tfno;
-    }
 }

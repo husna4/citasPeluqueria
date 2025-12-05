@@ -1,7 +1,6 @@
 package com.saki.citasPeluqueria.dataBuilder;
 
 
-import com.saki.citasPeluqueria.dto.ClienteDto;
 import com.saki.citasPeluqueria.modelo.Cliente;
 import org.modelmapper.ModelMapper;
 
