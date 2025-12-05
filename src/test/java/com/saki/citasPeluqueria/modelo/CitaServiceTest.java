@@ -4,8 +4,7 @@ import com.saki.citasPeluqueria.dataBuilder.CitaUpdateCreateDtoData;
 import com.saki.citasPeluqueria.dataBuilder.ClienteDtoData;
 import com.saki.citasPeluqueria.dataBuilder.CorteDtoData;
 import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
-import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
-import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.repositorio.CitaRepository;
 import com.saki.citasPeluqueria.service.CitaService;
 import com.saki.citasPeluqueria.service.ClienteService;
@@ -60,7 +59,7 @@ public class CitaServiceTest {
     @Test
     @DisplayName("Crear cita creando nuevo cliente")
     void crearCita_ClienteNoExistente_DeberiaCrearNuevoCliente() {
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE.getCitaDto();
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE.getCitaDto();
         Cita cita = CitaUpdateCreateDtoData.VALIDA_CON_PELUQUERO_SIN_ID_CLIENTE.getCita();
 
         when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
@@ -80,7 +79,7 @@ public class CitaServiceTest {
     @Test
     @DisplayName("Crear nueva cita obteniendo cliente de la BD")
     void crearCita_ClienteExistente_NoDeberiaCrearNuevoCliente() {
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData
                 .VALIDA_CON_PELUQUERO_CON_ID_CLIENTE.getCitaDto();
 
         Cita citaEsperada = CitaUpdateCreateDtoData
@@ -111,7 +110,7 @@ public class CitaServiceTest {
     @DisplayName("Error al crear cita sin cliente")
     void crearCita_SinCliente_DeberiaLanzarExcepcion() {
         Corte corte = CorteDtoData.VALIDO_CLASICO.getCorte();
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
         Cita cita = CitaUpdateCreateDtoData.SIN_CLIENTE.getCita();
 
         String mensajeMock = "El cliente es obligatorio para crear la cita";
@@ -132,7 +131,7 @@ public class CitaServiceTest {
     @Test
     @DisplayName("Crear cita sin cliente sin errores esperados")
     void crearCita_SinCliente_SinErroresEsperados() {
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
         Cita cita =  CitaUpdateCreateDtoData.SIN_CLIENTE.getCita();
 
         when(modelMapperMock.map(citaDto, Cita.class)).thenReturn(cita);
@@ -155,7 +154,7 @@ public class CitaServiceTest {
                 .VALIDA_CON_PELUQUERO_SIN_CLIENTE_CON_ID.getCita();
         UUID idCitaAModificar = citaAnterior.getId();
 
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData
                 .VALIDA_PARA_MODIFICAR_1.getCitaDto();
         citaDto.setId(idCitaAModificar);
 
@@ -211,7 +210,7 @@ public class CitaServiceTest {
     @Test
     @DisplayName("Modificar cita sin crear cliente (cliente ya existe)")
     void modificarCita_ConClienteExistente_NoDeberiaCrearNuevoCliente() {
-        CitaCreateUpdateDto citaDto = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCitaDto();
+        CitaRequestDto citaDto = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCitaDto();
         Cita citaEsperada = CitaUpdateCreateDtoData.VALIDA_PARA_MODIFICAR_1.getCita();
         Cliente clienteExistente = ClienteDtoData.VALIDO_JUAN_CON_ID.getCliente();
 

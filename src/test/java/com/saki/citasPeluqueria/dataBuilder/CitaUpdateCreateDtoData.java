@@ -1,7 +1,6 @@
 package com.saki.citasPeluqueria.dataBuilder;
 
-import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
-import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.modelo.Cita;
 import org.modelmapper.ModelMapper;
 
@@ -100,16 +99,16 @@ public enum CitaUpdateCreateDtoData {
             .setIdPeluqueroAsignado(PeluqueroDtoData.VALIDO_ANA.getPeluqueroDto().getId())
             .build());
 
-    private CitaCreateUpdateDto citaDto;
+    private CitaRequestDto citaDto;
 
     private ModelMapper modelMapper;
 
-    CitaUpdateCreateDtoData(CitaCreateUpdateDto citaDto) {
+    CitaUpdateCreateDtoData(CitaRequestDto citaDto) {
         this.citaDto = citaDto;
         modelMapper = new ModelMapper();
     }
 
-    public CitaCreateUpdateDto getCitaDto() {
+    public CitaRequestDto getCitaDto() {
         return citaDto;
     }
 
@@ -118,10 +117,10 @@ public enum CitaUpdateCreateDtoData {
     }
 
     public static class CitaUpdateCreateDtoBuilder {
-        private CitaCreateUpdateDto citaDto;
+        private CitaRequestDto citaDto;
 
         public CitaUpdateCreateDtoBuilder(){
-            citaDto = new CitaCreateUpdateDto();
+            citaDto = new CitaRequestDto();
         }
 
         public CitaUpdateCreateDtoBuilder setId(UUID id) {
@@ -166,7 +165,7 @@ public enum CitaUpdateCreateDtoData {
             return this;
         }
 
-        public CitaCreateUpdateDto build() {
+        public CitaRequestDto build() {
             return citaDto;
         }
     }

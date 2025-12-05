@@ -1,6 +1,5 @@
 package com.saki.citasPeluqueria.service;
 
-import com.saki.citasPeluqueria.dto.ClienteDto;
 import com.saki.citasPeluqueria.modelo.Cliente;
 import com.saki.citasPeluqueria.repositorio.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;

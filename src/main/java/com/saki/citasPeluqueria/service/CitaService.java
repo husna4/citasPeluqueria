@@ -1,8 +1,7 @@
 package com.saki.citasPeluqueria.service;
 
 import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
-import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
-import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.exceptions.ObjectNotFoundException;
 import com.saki.citasPeluqueria.modelo.Cita;
 import com.saki.citasPeluqueria.modelo.Cliente;
@@ -60,7 +59,7 @@ public class CitaService {
         return citaRepository.findById(id);
     }
 
-    public Cita crearCita(@NotNull CitaCreateUpdateDto citaDto) throws IllegalArgumentException {
+    public Cita crearCita(@NotNull CitaRequestDto citaDto) throws IllegalArgumentException {
         Cita cita = modelMapper.map(citaDto, Cita.class);
         anyadirCortesACita(cita, citaDto);
         anaydirClienteACitaDesdeDto(cita, citaDto);
@@ -72,7 +71,7 @@ public class CitaService {
         return citaRepository.save(cita);
     }
 
-    public Cita modificarCita(@NotNull UUID id, @NotNull CitaCreateUpdateDto citaDto) throws IllegalArgumentException {
+    public Cita modificarCita(@NotNull UUID id, @NotNull CitaRequestDto citaDto) throws IllegalArgumentException {
         Cita cita = getCitaById(id).orElseThrow(() ->
                 new ObjectNotFoundException(messageSource, Cita.class.getSimpleName(), id));
 
@@ -98,12 +97,12 @@ public class CitaService {
         citaRepository.deleteById(id);
     }
 
-    private void anyadirCortesACita(Cita cita, CitaCreateUpdateDto citaDto) {
+    private void anyadirCortesACita(Cita cita, CitaRequestDto citaDto) {
         List<Corte> cortes = corteService.getCorteByIds(citaDto.getIdsCorte().stream().toList());
         cita.setCortes(new HashSet<>(cortes));
     }
 
-    private void anaydirClienteACitaDesdeDto(Cita cita, CitaCreateUpdateDto citaDto) throws IllegalArgumentException {
+    private void anaydirClienteACitaDesdeDto(Cita cita, CitaRequestDto citaDto) throws IllegalArgumentException {
         ClienteDto clienteDto = citaDto.getCliente();
 
         if (clienteDto == null || (Util.isNullOrEmpty(clienteDto.getNombre()) &&
@@ -118,7 +117,7 @@ public class CitaService {
         cita.setCliente(cliente);
     }
 
-    private void anaydirPeluqueroAsignadoACita(Cita cita, CitaCreateUpdateDto citaDto) {
+    private void anaydirPeluqueroAsignadoACita(Cita cita, CitaRequestDto citaDto) {
         peluqueroService.getPeluqueroById(citaDto.getIdPeluqueroAsignado())
                 .ifPresent(cita::setPeluqueroAsignado);
 

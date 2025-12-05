@@ -1,7 +1,7 @@
 package com.saki.citasPeluqueria.controllers;
 
 import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
-import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
+import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaDto;
 import com.saki.citasPeluqueria.modelo.Cita;
 import com.saki.citasPeluqueria.service.CitaService;
@@ -68,7 +68,7 @@ public class CitaController {
     }
 
     @PostMapping
-    public ResponseEntity<CitaDto> crearCita(@Valid @RequestBody CitaCreateUpdateDto citaDto) {
+    public ResponseEntity<CitaDto> crearCita(@Valid @RequestBody CitaRequestDto citaDto) {
          Cita cita = citaService.crearCita(citaDto);
 
         if(cita == null) {
@@ -80,7 +80,7 @@ public class CitaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CitaDto> modificarCita(@PathVariable UUID id,
-                                                 @Valid @RequestBody CitaCreateUpdateDto citaDto) {
+                                                 @Valid @RequestBody CitaRequestDto citaDto) {
 
         Cita cita = citaService.modificarCita(id, citaDto);
 

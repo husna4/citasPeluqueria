@@ -1,7 +1,7 @@
 package com.saki.citasPeluqueria.modelo;
 
 import com.saki.citasPeluqueria.dataBuilder.CitaUpdateCreateDtoData;
-import com.saki.citasPeluqueria.dto.CitaCreateUpdateDto;
+import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
@@ -87,11 +87,11 @@ public class CitaValidationTest {
     @DisplayName("Debe fallar cuando existen varios errores de validación")
     void testValidarVariosCamposAlCrearOModificarCita() {
 
-        CitaCreateUpdateDto cita = CitaUpdateCreateDtoData.SIN_FECHA_HORA_CLIENTE_CORTES.getCitaDto();
+        CitaRequestDto cita = CitaUpdateCreateDtoData.SIN_FECHA_HORA_CLIENTE_CORTES.getCitaDto();
 
         String[] propiedadesConErrorEsperadas = {NOMBRE_PROPIEDAD_FECHA_CITA, NOMBRE_PROPIEDAD_HORA_CITA};
 
-        Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
+        Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
 
         assertThat(violations)
                 .hasSize(propiedadesConErrorEsperadas.length)
@@ -104,9 +104,9 @@ public class CitaValidationTest {
     @DisplayName("Se debe crear la cita sin cliente")
     void testValidarCitaSinClienteAlCrearOModificarCita() {
 
-        CitaCreateUpdateDto cita = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
+        CitaRequestDto cita = CitaUpdateCreateDtoData.SIN_CLIENTE.getCitaDto();
 
-        Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
+        Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
 
         assertThat(violations).hasSize(0);
     }
@@ -114,9 +114,9 @@ public class CitaValidationTest {
     @Test
     @DisplayName("Se debe validar sin ningún error esperado")
     void testValidarSinErroresEsperadosAlCrearOModificarCita() {
-        CitaCreateUpdateDto cita = CitaUpdateCreateDtoData.VALIDA.getCitaDto();
+        CitaRequestDto cita = CitaUpdateCreateDtoData.VALIDA.getCitaDto();
 
-        Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
+        Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
 
         assertThat(violations).hasSize(0);
     }
@@ -126,9 +126,9 @@ public class CitaValidationTest {
                                      String nombrePropiedadConErrorEsperado,
                                      String mensajeErrorAlValidarEsperado) {
 
-        CitaCreateUpdateDto cita = datosCitaDto.getCitaDto();
+        CitaRequestDto cita = datosCitaDto.getCitaDto();
 
-        Set<ConstraintViolation<CitaCreateUpdateDto>> violations = validator.validate(cita);
+        Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
 
         assertThat(violations)
                 .hasSize(numViolationsEsperadas)
