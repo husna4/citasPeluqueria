@@ -9,13 +9,6 @@ import java.util.stream.Collectors;
  * @author husnain
  */
 public class Util {
-
-    public static <E,D> List<D> convertListEntityToDto(List<E> entities, Class<D> dtoClass, ModelMapper modelMapper){
-        return entities.stream()
-                .map(e -> modelMapper.map(e, dtoClass))
-                .collect(Collectors.toList());
-    }
-
     public static boolean isNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
     }

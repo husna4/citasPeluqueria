@@ -5,6 +5,7 @@ import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaDto;
 import com.saki.citasPeluqueria.modelo.Cita;
 import com.saki.citasPeluqueria.service.CitaService;
+import com.saki.citasPeluqueria.util.ModelMapperUtil;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,16 +33,12 @@ public class CitaController {
 
     @GetMapping
     public ResponseEntity<List<CitaDto>> obtenerCitas() {
-        List<CitaDto> citasDto = citaService.getCitas().stream()
-                .map(cita -> modelMapper.map(cita, CitaDto.class))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(citasDto);
+        return ResponseEntity.ok(ModelMapperUtil.convertListEntityToDto(citaService.getCitas(),
+                CitaDto.class, modelMapper));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CitaDto> obtenerCita(@PathVariable UUID id) {
-
         return citaService.getCitaById(id)
                 .map(c -> ResponseEntity.ok(modelMapper.map(c, CitaDto.class)))
                 .orElse(ResponseEntity.notFound().build());
@@ -49,22 +46,14 @@ public class CitaController {
 
     @GetMapping("/sin-atender")
     public ResponseEntity<List<CitaDto>> obtenerCitasSinAtender() {
-
-        List<CitaDto> citasDto = citaService.getCitasByAtendia(false).stream()
-                .map(cita -> modelMapper.map(cita, CitaDto.class))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(citasDto);
+        return ResponseEntity.ok(ModelMapperUtil.convertListEntityToDto(citaService.getCitasByAtendia(false),
+                CitaDto.class, modelMapper));
     }
 
     @GetMapping("/atendidas")
     public ResponseEntity<List<CitaDto>> obtenerCitasAtendidas() {
-
-        List<CitaDto> citasDto = citaService.getCitasByAtendia(true).stream()
-                .map(cita -> modelMapper.map(cita, CitaDto.class))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(citasDto);
+        return ResponseEntity.ok(ModelMapperUtil.convertListEntityToDto(citaService.getCitasByAtendia(true),
+                CitaDto.class, modelMapper));
     }
 
     @PostMapping

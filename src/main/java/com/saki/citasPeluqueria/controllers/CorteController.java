@@ -4,6 +4,7 @@ package com.saki.citasPeluqueria.controllers;
 import com.saki.citasPeluqueria.dto.CorteDto;
 import com.saki.citasPeluqueria.modelo.Corte;
 import com.saki.citasPeluqueria.service.CorteService;
+import com.saki.citasPeluqueria.util.ModelMapperUtil;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,8 @@ public class CorteController {
 
     @GetMapping
     public ResponseEntity<List<CorteDto>> obtenerCorte() {
-        return ResponseEntity.ok(
-                corteService.getCortes().stream().map(corte -> modelMapper.map(corte, CorteDto.class))
-                        .collect(Collectors.toList()));
+        return ResponseEntity.ok(ModelMapperUtil.convertListEntityToDto(corteService.getCortes(),
+                        CorteDto.class, modelMapper));
     }
 
     @GetMapping("/{id}")
