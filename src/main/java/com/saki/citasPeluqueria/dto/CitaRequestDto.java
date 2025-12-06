@@ -1,5 +1,6 @@
 package com.saki.citasPeluqueria.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,7 +25,6 @@ import java.util.UUID;
 @Builder
 public class CitaRequestDto {
 
-//    @NotEmpty(message = "{cita.cortes.requerido}")
     private Set<UUID> idsCorte;
 
     private UUID idPeluqueroAsignado;
@@ -40,12 +40,10 @@ public class CitaRequestDto {
     @Digits(integer = 10, fraction = 2, message = "{cita.precio.formato}")
     private BigDecimal precio;
 
-    @Length(max = 1000)
+    @Size(max = 1000)
     private String observaciones;
 
-    @Size(max = 50, message = "{cliente.nombre.tamanyo}")
-    private String nombreCliente;
-
+    private ClienteAnonimoDto clienteAnonimo;
 
     private Long idCliente;
 

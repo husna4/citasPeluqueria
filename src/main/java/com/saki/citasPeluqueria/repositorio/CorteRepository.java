@@ -8,6 +8,6 @@ import java.util.UUID;
 /**
  * @author husnain
  */
-public interface CorteRepository extends JpaRepository<Corte, UUID> {
+public interface CorteRepository extends JpaRepository<Corte, Long> {
 
 }

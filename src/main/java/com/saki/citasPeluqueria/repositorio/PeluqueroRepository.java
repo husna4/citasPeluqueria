@@ -9,5 +9,5 @@ import java.util.UUID;
 /**
  * @author husnain
  */
-public interface PeluqueroRepository extends JpaRepository<Peluquero, UUID> {
+public interface PeluqueroRepository extends JpaRepository<Peluquero, Long> {
 }

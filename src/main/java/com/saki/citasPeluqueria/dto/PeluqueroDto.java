@@ -11,8 +11,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PeluqueroDto extends PersonaDto {
-    @NotBlank(message = "{peluquero.nombre.vacio}")
-    @Size(max = 50, message = "{peluquero.nombre.tamanyo}")
+public class PeluqueroDto {
+    private Long id;
+
+    private String tfno;
+
     private String nombre;
 }

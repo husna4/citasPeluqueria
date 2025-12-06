@@ -25,7 +25,6 @@ public class CitaDto {
     private LocalDate fecha;
     private LocalTime hora;
     private boolean atendida;
-    private ClienteDto cliente;
     private BigDecimal precio;
     private String observaciones;
     private Set<CorteDto> cortes;
