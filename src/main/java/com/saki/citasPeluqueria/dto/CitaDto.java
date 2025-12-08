@@ -1,6 +1,8 @@
 package com.saki.citasPeluqueria.dto;
 
 
+import com.saki.citasPeluqueria.modelo.Cliente;
+import com.saki.citasPeluqueria.modelo.ClienteAnonimo;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,4 +31,6 @@ public class CitaDto {
     private String observaciones;
     private Set<CorteDto> cortes;
     private PeluqueroDto peluqueroAsignado;
+    private Cliente cliente;
+    private ClienteAnonimo clienteAnonimo;
 }

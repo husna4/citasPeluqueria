@@ -35,12 +35,8 @@ public class PeluqueroService {
         return peluqueroRepository.findAll();
     }
 
-    public Optional<Peluquero> getPeluqueroById(UUID id) {
-        if(id == null) {
-            return Optional.empty();
-        }
-
-        return peluqueroRepository.findById(id);
+    public Peluquero getPeluqueroById(Long id) {
+        return peluqueroRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Peluquero", id));
     }
 
     public Peluquero crearPeluquero(PeluqueroDto peluqueroDto) {
@@ -49,11 +45,10 @@ public class PeluqueroService {
         return peluqueroRepository.save(peluquero);
     }
 
-    public Peluquero modificarPeluquero(@NotNull UUID id,
-                                        @NotNull PeluqueroDto peluqueroDto) throws ObjectNotFoundException {
+    public Peluquero modificarPeluquero(Long id,
+                                        PeluqueroDto peluqueroDto) throws ObjectNotFoundException {
 
-        Peluquero peluquero = getPeluqueroById(id).orElseThrow(() ->
-                new ObjectNotFoundException(messageSource, Peluquero.class.getSimpleName(), id));
+        Peluquero peluquero = getPeluqueroById(id);
 
         peluquero.setNombre(peluqueroDto.getNombre());
         peluquero.setTfno(peluqueroDto.getTfno());
@@ -61,9 +56,8 @@ public class PeluqueroService {
         return peluqueroRepository.save(peluquero);
     }
 
-    public void eliminarPeluquero(@NotNull UUID id) throws ObjectNotFoundException {
-        getPeluqueroById(id).orElseThrow(() ->
-                new ObjectNotFoundException(messageSource, Peluquero.class.getSimpleName(), id));
+    public void eliminarPeluquero(Long id) throws ObjectNotFoundException {
+        getPeluqueroById(id);
 
         peluqueroRepository.deleteById(id);
     }

@@ -3,6 +3,7 @@ package com.saki.citasPeluqueria.controllers;
 import com.saki.citasPeluqueria.dto.PeluqueroDto;
 import com.saki.citasPeluqueria.modelo.Peluquero;
 import com.saki.citasPeluqueria.service.PeluqueroService;
+import com.saki.citasPeluqueria.util.ModelMapperUtil;
 import com.saki.citasPeluqueria.util.Util;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -26,15 +27,13 @@ public class PeluqueroController {
 
     @GetMapping
     public ResponseEntity<List<PeluqueroDto>> obtenerPeluqueros() {
-        return ResponseEntity.ok(Util.convertListEntityToDto(peluqueroService.getAllPeluqueros(),
+        return ResponseEntity.ok(ModelMapperUtil.convertListEntityToDto(peluqueroService.getAllPeluqueros(),
                 PeluqueroDto.class, modelMapper));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PeluqueroDto> obtenerPeluquero(@PathVariable UUID id) {
-        return peluqueroService.getPeluqueroById(id)
-                .map(p -> ResponseEntity.ok(modelMapper.map(p, PeluqueroDto.class)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<PeluqueroDto> obtenerPeluquero(@PathVariable Long id) {
+        return ResponseEntity.ok(modelMapper.map(peluqueroService.getPeluqueroById(id), PeluqueroDto.class));
     }
 
     @PostMapping
@@ -46,7 +45,7 @@ public class PeluqueroController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PeluqueroDto> modificarPeluquero(@PathVariable UUID id, @Valid @RequestBody PeluqueroDto dto) {
+    public ResponseEntity<PeluqueroDto> modificarPeluquero(@PathVariable Long id, @Valid @RequestBody PeluqueroDto dto) {
         Peluquero peluquero = peluqueroService.modificarPeluquero(id, dto);
 
         if (peluquero == null) {
@@ -57,7 +56,7 @@ public class PeluqueroController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<PeluqueroDto> eliminarPeluquero(@PathVariable UUID id) {
+    public ResponseEntity<PeluqueroDto> eliminarPeluquero(@PathVariable Long id) {
         peluqueroService.eliminarPeluquero(id);
 
         return ResponseEntity.noContent().build();

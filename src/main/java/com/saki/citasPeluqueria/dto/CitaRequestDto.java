@@ -25,9 +25,9 @@ import java.util.UUID;
 @Builder
 public class CitaRequestDto {
 
-    private Set<UUID> idsCorte;
+    private Set<Long> idsCorte;
 
-    private UUID idPeluqueroAsignado;
+    private Long idPeluqueroAsignado;
 
     @NotNull(message = "{cita.fecha.requerida}")
     private LocalDate fecha;
@@ -46,12 +46,4 @@ public class CitaRequestDto {
     private ClienteAnonimoDto clienteAnonimo;
 
     private Long idCliente;
-
-    public void addIdCorte(UUID idCorte) {
-        if(getIdsCorte() == null) {
-            setIdsCorte(new HashSet<>());
-        }
-
-        getIdsCorte().add(idCorte);
-    }
 }

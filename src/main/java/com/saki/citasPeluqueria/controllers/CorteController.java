@@ -2,6 +2,7 @@ package com.saki.citasPeluqueria.controllers;
 
 
 import com.saki.citasPeluqueria.dto.CorteDto;
+import com.saki.citasPeluqueria.dto.CorteRequestDto;
 import com.saki.citasPeluqueria.modelo.Corte;
 import com.saki.citasPeluqueria.service.CorteService;
 import com.saki.citasPeluqueria.util.ModelMapperUtil;
@@ -24,11 +25,14 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/cortes")
 public class CorteController {
 
-    @Autowired
-    private CorteService corteService;
+    private final CorteService corteService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
+
+    public CorteController(CorteService corteService, ModelMapper modelMapper) {
+        this.corteService = corteService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<CorteDto>> obtenerCorte() {
@@ -37,25 +41,19 @@ public class CorteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CorteDto> obtenerCorte(@PathVariable UUID id) {
-        return corteService.getCorteById(id).map(c ->
-                ResponseEntity.ok(modelMapper.map(c, CorteDto.class)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CorteDto> obtenerCorte(@PathVariable Long id) {
+        return ResponseEntity.ok(modelMapper.map(corteService.getCorteById(id), CorteDto.class));
     }
 
     @PostMapping
-    public ResponseEntity<CorteDto> crearNuevoCorte(@Valid @RequestBody CorteDto corteDto) {
+    public ResponseEntity<CorteDto> crearNuevoCorte(@Valid @RequestBody CorteRequestDto corteDto) {
         Corte corte = corteService.crearCorte(corteDto);
-
-        if(corte == null) {
-            return ResponseEntity.internalServerError().build();
-        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(corte, CorteDto.class));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CorteDto> modificarCorte(@PathVariable UUID id, @Valid @RequestBody CorteDto corteDto) {
+    public ResponseEntity<CorteDto> modificarCorte(@PathVariable Long id, @Valid @RequestBody CorteRequestDto corteDto) {
         Corte corte = corteService.modificarCorte(id, corteDto);
 
         if(corte == null) {
@@ -66,7 +64,7 @@ public class CorteController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarCorte(@PathVariable UUID id) {
+    public ResponseEntity<Void> eliminarCorte(@PathVariable Long id) {
         corteService.eliminarCorte(id);
 
         return ResponseEntity.noContent().build();

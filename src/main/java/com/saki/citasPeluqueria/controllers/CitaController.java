@@ -3,6 +3,7 @@ package com.saki.citasPeluqueria.controllers;
 import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaDto;
+import com.saki.citasPeluqueria.mappers.CitaMapper;
 import com.saki.citasPeluqueria.modelo.Cita;
 import com.saki.citasPeluqueria.service.CitaService;
 import com.saki.citasPeluqueria.util.ModelMapperUtil;
@@ -25,11 +26,13 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/citas")
 public class CitaController {
 
-    @Autowired
-    private CitaService citaService;
+    private final CitaService citaService;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    public CitaController(CitaService citaService, ModelMapper modelMapper) {
+        this.citaService = citaService;
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<CitaDto>> obtenerCitas() {
@@ -38,10 +41,8 @@ public class CitaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CitaDto> obtenerCita(@PathVariable UUID id) {
-        return citaService.getCitaById(id)
-                .map(c -> ResponseEntity.ok(modelMapper.map(c, CitaDto.class)))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CitaDto> obtenerCita(@PathVariable Long id) {
+        return ResponseEntity.ok(modelMapper.map(citaService.getCitaById(id), CitaDto.class));
     }
 
     @GetMapping("/sin-atender")
@@ -58,43 +59,29 @@ public class CitaController {
 
     @PostMapping
     public ResponseEntity<CitaDto> crearCita(@Valid @RequestBody CitaRequestDto citaDto) {
-         Cita cita = citaService.crearCita(citaDto);
-
-        if(cita == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
+        Cita cita = citaService.crearCita(citaDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(modelMapper.map(cita, CitaDto.class));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CitaDto> modificarCita(@PathVariable UUID id,
+    public ResponseEntity<CitaDto> modificarCita(@PathVariable Long id,
                                                  @Valid @RequestBody CitaRequestDto citaDto) {
 
         Cita cita = citaService.modificarCita(id, citaDto);
-
-        if(cita == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
         return ResponseEntity.ok(modelMapper.map(cita, CitaDto.class));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCita(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteCita(@PathVariable Long id) {
         citaService.eliminarCita(id);
-
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/atender")
-    public ResponseEntity<CitaDto> atenderCita(@PathVariable UUID id,
+    public ResponseEntity<CitaDto> atenderCita(@PathVariable Long id,
                                                @Valid @RequestBody AtenderCitaRequestDto citaAtendidaDto) {
         Cita cita = citaService.atenderCita(id, citaAtendidaDto);
 
-        if(cita == null) {
-            return ResponseEntity.badRequest().build();
-        }
         return ResponseEntity.ok(modelMapper.map(cita, CitaDto.class));
     }
 }

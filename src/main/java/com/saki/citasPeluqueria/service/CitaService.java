@@ -3,45 +3,28 @@ package com.saki.citasPeluqueria.service;
 import com.saki.citasPeluqueria.dto.AtenderCitaRequestDto;
 import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.exceptions.ObjectNotFoundException;
+import com.saki.citasPeluqueria.mappers.CitaMapper;
 import com.saki.citasPeluqueria.modelo.Cita;
-import com.saki.citasPeluqueria.modelo.Cliente;
-import com.saki.citasPeluqueria.modelo.Corte;
 import com.saki.citasPeluqueria.repositorio.CitaRepository;
-import com.saki.citasPeluqueria.util.Util;
-import jakarta.validation.constraints.NotNull;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author husnain
  */
 
 @Service
+@Transactional(readOnly = true)
 public class CitaService {
-    @Autowired
-    private CitaRepository citaRepository;
+    private final CitaRepository citaRepository;
+    private final CitaMapper citaMapper;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private CorteService corteService;
-
-    @Autowired
-    private ClienteService clienteService;
-
-    @Autowired
-    private PeluqueroService peluqueroService;
-
-    @Autowired
-    private MessageSource messageSource;
+    public CitaService(CitaRepository citaRepository, CitaMapper citaMapper) {
+        this.citaRepository = citaRepository;
+        this.citaMapper = citaMapper;
+    }
 
     public List<Cita> getCitas() {
         return citaRepository.findAll();
@@ -51,81 +34,31 @@ public class CitaService {
         return citaRepository.findByAtendidaOrderByFechaAscHoraAsc(atendida);
     }
 
-    public Optional<Cita> getCitaById(UUID id) {
-        if(id == null) {
-            return Optional.empty();
-        }
-
-        return citaRepository.findById(id);
+    public Cita getCitaById(Long id) {
+        return citaRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cita", id));
     }
 
-    public Cita crearCita(@NotNull CitaRequestDto citaDto) throws IllegalArgumentException {
-        Cita cita = modelMapper.map(citaDto, Cita.class);
-        anyadirCortesACita(cita, citaDto);
-        anaydirClienteACitaDesdeDto(cita, citaDto);
-
-        if(citaDto.getIdPeluqueroAsignado() != null) {
-            anaydirPeluqueroAsignadoACita(cita, citaDto);
-        }
-
+    @Transactional
+    public Cita crearCita(CitaRequestDto citaDto) {
+        Cita cita = citaMapper.toEntity(citaDto);
         return citaRepository.save(cita);
     }
 
-    public Cita modificarCita(@NotNull UUID id, @NotNull CitaRequestDto citaDto) throws IllegalArgumentException {
-        Cita cita = getCitaById(id).orElseThrow(() ->
-                new ObjectNotFoundException(messageSource, Cita.class.getSimpleName(), id));
-
-        cita.setFecha(citaDto.getFecha());
-        cita.setHora(citaDto.getHora());
-        cita.setAtendida(citaDto.isAtendida());
-        cita.setObservaciones(citaDto.getObservaciones());
-
-        anyadirCortesACita(cita, citaDto);
-        anaydirClienteACitaDesdeDto(cita, citaDto);
-
-        if(citaDto.getIdPeluqueroAsignado() != null) {
-            anaydirPeluqueroAsignadoACita(cita, citaDto);
-        }
-        else{
-           cita.setPeluqueroAsignado(null);
-        }
-
+    @Transactional
+    public Cita modificarCita(Long id, CitaRequestDto citaDto) {
+        Cita cita = getCitaById(id);
+        cita = citaMapper.updateEntity(citaDto, cita);
         return citaRepository.save(cita);
     }
 
-    public void eliminarCita(@NotNull UUID id){
+    @Transactional
+    public void eliminarCita(Long id) {
         citaRepository.deleteById(id);
     }
 
-    private void anyadirCortesACita(Cita cita, CitaRequestDto citaDto) {
-        List<Corte> cortes = corteService.getCorteByIds(citaDto.getIdsCorte().stream().toList());
-        cita.setCortes(new HashSet<>(cortes));
-    }
-
-    private void anaydirClienteACitaDesdeDto(Cita cita, CitaRequestDto citaDto) throws IllegalArgumentException {
-        ClienteDto clienteDto = citaDto.getCliente();
-
-        if (clienteDto == null || (Util.isNullOrEmpty(clienteDto.getNombre()) &&
-                Util.isNullOrEmpty(clienteDto.getTfno()) && clienteDto.getId() == null)) {
-            cita.setCliente(null);
-            return;
-        }
-
-        Cliente cliente = clienteService.getClienteById(citaDto.getCliente().getId())
-                .orElseGet(() -> clienteService.crearClienteDesdeDto(citaDto.getCliente()));
-
-        cita.setCliente(cliente);
-    }
-
-    private void anaydirPeluqueroAsignadoACita(Cita cita, CitaRequestDto citaDto) {
-        peluqueroService.getPeluqueroById(citaDto.getIdPeluqueroAsignado())
-                .ifPresent(cita::setPeluqueroAsignado);
-
-    }
-
-    public Cita atenderCita(@NotNull UUID idCita, @NotNull AtenderCitaRequestDto citaAtendidaDto) throws ObjectNotFoundException {
-        Cita cita = citaRepository.findById(idCita).orElseThrow(() ->
-                new ObjectNotFoundException(messageSource, Cita.class.getSimpleName(), idCita));
+    @Transactional
+    public Cita atenderCita(Long idCita, AtenderCitaRequestDto citaAtendidaDto) throws ObjectNotFoundException {
+        Cita cita = getCitaById(idCita);
 
         cita.setAtendida(true);
         cita.setPrecio(citaAtendidaDto.getPrecio());
