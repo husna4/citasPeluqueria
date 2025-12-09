@@ -15,10 +15,14 @@ import java.util.UUID;
 
 @Service
 public class ClienteService {
-    @Autowired
-    private ClienteRepository clienteRepository;
+
+    private final ClienteRepository clienteRepository;
+
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
 
     public Cliente getClienteById(Long id){
-        return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Cliente", id));
+        return clienteRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(Cliente.class.getSimpleName(), id));
     }
 }

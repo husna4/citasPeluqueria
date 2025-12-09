@@ -15,6 +15,8 @@ public class ObjectNotFoundException extends RuntimeException {
     private String nombreEntidad;
     private Object idEntidad;
 
+    public static final String ID_MENSAJE = "objeto.no.encontrado";
+
     public ObjectNotFoundException(MessageSource messageSource, String nombreEntidad, Object id) {
         super(messageSource.getMessage("objeto.no.encontrado",
                 new Object[]{nombreEntidad, id}, Locale.getDefault()));
