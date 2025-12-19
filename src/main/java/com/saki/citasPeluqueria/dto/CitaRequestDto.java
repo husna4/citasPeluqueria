@@ -1,5 +1,6 @@
 package com.saki.citasPeluqueria.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
@@ -43,7 +44,14 @@ public class CitaRequestDto {
     @Size(max = 1000)
     private String observaciones;
 
+    @Valid
     private ClienteAnonimoDto clienteAnonimo;
 
     private Long idCliente;
+
+    @AssertTrue(message = "{cita.cliente.requerido}")
+    private boolean isClienteValido() {
+        // XOR: uno u otro, pero no ambos ni ninguno
+        return idCliente != null ^ clienteAnonimo != null;
+    }
 }
