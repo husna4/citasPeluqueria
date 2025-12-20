@@ -19,13 +19,13 @@ import java.util.Set;
 public abstract class CitaMapper {
 
     @Autowired
-    protected ClienteService clienteService;
+    private ClienteService clienteService;
 
     @Autowired
-    protected PeluqueroService peluqueroService;
+    private PeluqueroService peluqueroService;
 
     @Autowired
-    protected CorteService corteService;
+    private CorteService corteService;
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cliente", expression = "java(findClienteById(dto.getIdCliente()))")

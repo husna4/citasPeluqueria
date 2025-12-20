@@ -10,6 +10,9 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * @author husnain
+ */
 public class CitaValidationTest {
 
     private final Validator validator;
@@ -51,16 +54,23 @@ public class CitaValidationTest {
 
     @Test
     @DisplayName("No se debe crear la cita sin cliente")
-    void testValidarCitaSinClienteAlCrearOModificarCita() {
+    void testValidarCita_SinClienteAlCrearOModificarCita() {
         verificarValidacion(CitaRequestDtoData.SIN_CLIENTE, 1,
                 PROPIEDADA_ASSERTION_CITA_CLIENTE);
 
     }
 
     @Test
+    @DisplayName("Debe fallar la validación al existir tanto el id del cliente como el cliente anónimo")
+    void testValidarCita_CuandoExisteIdClienteYClienteAnonimo_DebeDarError() {
+        verificarValidacion(CitaRequestDtoData.CON_ID_CLIENTE_Y_CLIENTE_ANONIMO, 1,
+                PROPIEDADA_ASSERTION_CITA_CLIENTE);
+    }
+
+    @Test
     @DisplayName("Se debe validar sin ningún error esperado")
     void testValidarSinErroresEsperadosAlCrearOModificarCita() {
-        CitaRequestDto cita = CitaRequestDtoData.VALIDA.getCitaDto();
+        CitaRequestDto cita = CitaRequestDtoData.VALIDA_CON_ID_CLIENTE.getCitaDto();
 
         Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
 
