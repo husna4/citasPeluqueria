@@ -6,12 +6,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
-public class CitasPeluqueriaApplication extends SpringBootServletInitializer {
-
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(CitasPeluqueriaApplication.class);
-	}
+public class CitasPeluqueriaApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CitasPeluqueriaApplication.class, args);

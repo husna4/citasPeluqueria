@@ -5,12 +5,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.4</version>
+		<version>3.5.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.saki</groupId>
 	<artifactId>citasPeluqueria</artifactId>
-	<packaging>war</packaging>
 	<version>1.0</version>
 	<name>citasPeluqueria</name>
 	<description>Gestion de citas para la peluqueria</description>
@@ -76,34 +75,6 @@
             <scope>provided</scope>
         </dependency>
 	</dependencies>
-
-	<profiles>
-		<!-- Perfil de DESARROLLO: Tomcat embebido -->
-		<profile>
-			<id>dev</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-				</dependency>
-			</dependencies>
-		</profile>
-
-		<!-- Perfil de PRODUCCIÓN: Tomcat como provided -->
-		<profile>
-			<id>prod</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-tomcat</artifactId>
-					<scope>provided</scope>
-				</dependency>
-			</dependencies>
-		</profile>
-	</profiles>
 
     <build>
         <plugins>
