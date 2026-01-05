@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -25,18 +27,14 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationException(MethodArgumentNotValidException ex) {
-        Map<String, String> errores = new HashMap<>();
+        List<String> errores = new ArrayList<>();
         Map<String, Object> response = new HashMap<>();
 
         ex.getBindingResult().getFieldErrors().forEach(error ->
-                errores.put(error.getField(), error.getDefaultMessage()));
+                errores.add(error.getDefaultMessage()));
 
-        response.put("message", "Errores de validación");
-        response.put("errors", errores);
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("timestamp", getTimestampNow());
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(createResponse(String.join("<br>", errores),
+                HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ObjectNotFoundException.class)
