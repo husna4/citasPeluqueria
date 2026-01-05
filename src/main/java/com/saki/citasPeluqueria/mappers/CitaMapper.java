@@ -1,7 +1,7 @@
 package com.saki.citasPeluqueria.mappers;
 
 import com.saki.citasPeluqueria.dto.CitaRequestDto;
-import com.saki.citasPeluqueria.dto.ClienteAnonimoDto;
+import com.saki.citasPeluqueria.dto.ClienteDto;
 import com.saki.citasPeluqueria.modelo.*;
 import com.saki.citasPeluqueria.service.ClienteService;
 import com.saki.citasPeluqueria.service.CorteService;
@@ -39,7 +39,7 @@ public abstract class CitaMapper {
     @Mapping(target = "cortes", expression = "java(findCortesByIds(dto.getIdsCorte()))")
     public abstract Cita updateEntity(CitaRequestDto dto, @MappingTarget Cita cita);
 
-    public ClienteAnonimo toClienteAnonimo(ClienteAnonimoDto dto) {
+    public ClienteAnonimo toClienteAnonimo(ClienteDto dto) {
         if (dto == null) return null;
 
         ClienteAnonimo clienteAnonimo = new ClienteAnonimo();

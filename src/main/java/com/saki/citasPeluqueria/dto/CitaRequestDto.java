@@ -7,16 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * @author husnain
@@ -45,13 +40,13 @@ public class CitaRequestDto {
     private String observaciones;
 
     @Valid
-    private ClienteAnonimoDto clienteAnonimo;
+    private ClienteDto clienteARegistrar;
 
     private Long idCliente;
 
     @AssertTrue(message = "{cita.cliente.requerido}")
     private boolean isClienteValido() {
         // XOR: uno u otro, pero no ambos ni ninguno
-        return idCliente != null ^ clienteAnonimo != null;
+        return idCliente != null ^ clienteARegistrar != null;
     }
 }

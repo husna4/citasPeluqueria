@@ -31,6 +31,5 @@ public class CitaDto {
     private String observaciones;
     private Set<CorteDto> cortes;
     private PeluqueroDto peluqueroAsignado;
-    private Cliente cliente;
-    private ClienteAnonimo clienteAnonimo;
+    private ClienteDto cliente;
 }

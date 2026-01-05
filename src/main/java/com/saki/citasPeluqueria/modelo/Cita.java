@@ -41,10 +41,6 @@ public class Cita extends Identifiable {
     @JoinColumn(name = "idCliente", referencedColumnName = "id")
     private Cliente cliente;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idClienteAnonimo", referencedColumnName = "id")
-    private ClienteAnonimo clienteAnonimo;
-
     @ManyToOne
     @JoinColumn(name = "idPeluquero", referencedColumnName = "id")
     private Peluquero peluqueroAsignado;

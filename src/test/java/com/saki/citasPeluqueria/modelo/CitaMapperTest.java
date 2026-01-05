@@ -2,7 +2,7 @@ package com.saki.citasPeluqueria.modelo;
 
 import com.saki.citasPeluqueria.dataBuilder.CitaRequestDtoData;
 import com.saki.citasPeluqueria.dto.CitaRequestDto;
-import com.saki.citasPeluqueria.dto.ClienteAnonimoDto;
+import com.saki.citasPeluqueria.dto.ClienteDto;
 import com.saki.citasPeluqueria.mappers.CitaMapperImpl;
 import com.saki.citasPeluqueria.service.ClienteService;
 import com.saki.citasPeluqueria.service.CorteService;
@@ -55,7 +55,7 @@ public class CitaMapperTest {
     @Test
     void toEntity_deberiaCrearNuevoClienteAnonimo() {
         CitaRequestDto citaDto = CitaRequestDtoData.CON_CLIENTE_ANONIMO.getCitaDto();
-        ClienteAnonimoDto clienteAnonimoDto = citaDto.getClienteAnonimo();
+        ClienteDto clienteAnonimoDto = citaDto.getClienteAnonimo();
 
         Cita cita = citaMapper.toEntity(citaDto);
 

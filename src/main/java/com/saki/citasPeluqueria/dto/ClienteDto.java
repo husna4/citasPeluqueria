@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ClienteAnonimoDto {
+public class ClienteDto {
 
     @NotBlank(message = "{cliente.nombre.requerido}")
     @Size(max = 50, message = "{cliente.nombre.tamanyo}")
