@@ -8,12 +8,8 @@ import lombok.Data;
 @Data
 @Builder
 public class ClienteDto {
-
-    @NotBlank(message = "{cliente.nombre.requerido}")
-    @Size(max = 50, message = "{cliente.nombre.tamanyo}")
+    private Long id;
     private String nombre;
-
-    @Size(max = 50, message = "cliente.tfno.tamanyo")
     private String tfno;
 
 }

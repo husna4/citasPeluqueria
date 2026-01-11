@@ -40,13 +40,5 @@ public class CitaRequestDto {
     private String observaciones;
 
     @Valid
-    private ClienteDto clienteARegistrar;
-
-    private Long idCliente;
-
-    @AssertTrue(message = "{cita.cliente.requerido}")
-    private boolean isClienteValido() {
-        // XOR: uno u otro, pero no ambos ni ninguno
-        return idCliente != null ^ clienteARegistrar != null;
-    }
+    private ClienteRequestDto cliente;
 }

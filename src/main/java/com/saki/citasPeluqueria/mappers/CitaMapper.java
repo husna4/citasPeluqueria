@@ -2,13 +2,16 @@ package com.saki.citasPeluqueria.mappers;
 
 import com.saki.citasPeluqueria.dto.CitaRequestDto;
 import com.saki.citasPeluqueria.dto.ClienteDto;
+import com.saki.citasPeluqueria.dto.ClienteRequestDto;
 import com.saki.citasPeluqueria.modelo.*;
 import com.saki.citasPeluqueria.service.ClienteService;
 import com.saki.citasPeluqueria.service.CorteService;
 import com.saki.citasPeluqueria.service.PeluqueroService;
+import com.saki.citasPeluqueria.util.StringUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
@@ -27,30 +30,24 @@ public abstract class CitaMapper {
     @Autowired
     private CorteService corteService;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "cliente", expression = "java(findClienteById(dto.getIdCliente()))")
+    @Mapping(target = "cliente", expression = "java(estabelcerCliente(dto.getCliente()))")
     @Mapping(target = "peluqueroAsignado", expression = "java(findPeluqueroById(dto.getIdPeluqueroAsignado()))")
     @Mapping(target = "cortes", expression = "java(findCortesByIds(dto.getIdsCorte()))")
     public abstract Cita toEntity(CitaRequestDto dto);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "cliente", expression = "java(findClienteById(dto.getIdCliente()))")
+    @Mapping(target = "cliente", expression = "java(estabelcerCliente(dto.getCliente()))")
     @Mapping(target = "peluqueroAsignado", expression = "java(findPeluqueroById(dto.getIdPeluqueroAsignado()))")
     @Mapping(target = "cortes", expression = "java(findCortesByIds(dto.getIdsCorte()))")
     public abstract Cita updateEntity(CitaRequestDto dto, @MappingTarget Cita cita);
 
-    public ClienteAnonimo toClienteAnonimo(ClienteDto dto) {
-        if (dto == null) return null;
-
-        ClienteAnonimo clienteAnonimo = new ClienteAnonimo();
-        clienteAnonimo.setNombre(dto.getNombre());
-        clienteAnonimo.setTfno(dto.getTfno());
-        return clienteAnonimo;
-    }
-
-    protected Cliente findClienteById(Long id) {
-        if (id == null) return null;
-        return clienteService.getClienteById(id);
+    protected Cliente estabelcerCliente(ClienteRequestDto clienteDto) {
+        return clienteService.getByTfnoAndNombre(clienteDto.getTfno(), clienteDto.getNombre())
+                .orElse(clienteService.crearCliente(clienteDto));
     }
 
     protected Peluquero findPeluqueroById(Long id) {

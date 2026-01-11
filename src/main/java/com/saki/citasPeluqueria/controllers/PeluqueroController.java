@@ -4,7 +4,6 @@ import com.saki.citasPeluqueria.dto.PeluqueroDto;
 import com.saki.citasPeluqueria.modelo.Peluquero;
 import com.saki.citasPeluqueria.service.PeluqueroService;
 import com.saki.citasPeluqueria.util.ModelMapperUtil;
-import com.saki.citasPeluqueria.util.Util;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/peluquero")
