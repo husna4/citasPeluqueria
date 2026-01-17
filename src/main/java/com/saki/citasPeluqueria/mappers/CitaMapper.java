@@ -47,7 +47,7 @@ public abstract class CitaMapper {
 
     protected Cliente estabelcerCliente(ClienteRequestDto clienteDto) {
         return clienteService.getByTfnoAndNombre(clienteDto.getTfno(), clienteDto.getNombre())
-                .orElse(clienteService.crearCliente(clienteDto));
+                .orElseGet(() -> clienteService.crearCliente(clienteDto));
     }
 
     protected Peluquero findPeluqueroById(Long id) {
