@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Cita - Sistema de Citas</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/nuevaCita.css">
+    <link rel="stylesheet" href="../css/notifications.css">
+    <script src="../js/notifications.js"></script>
+    <script src="../js/nuevaCita.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📅 Nueva Cita</h1>
+            <p>Registra una nueva cita para la peluquería</p>
+        </header>
+
+        <div class="form-container">
+            <div class="form-card">
+                <form id="appointmentForm">
+                    <div class="form-section">
+                        <h3>📅 Fecha y Hora</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fecha">Fecha *</label>
+                                <input type="date" id="fecha" name="fecha" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hora">Hora *</label>
+                                <input type="time" id="hora" name="hora" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>👤 Información del Cliente</h3>
+                        <div class="form-group">
+                            <label for="nombreCliente">Nombre del Cliente</label>
+                            <input type="text" id="nombreCliente" name="nombreCliente" 
+                                   maxlength="50" pattern="[A-Za-zÀ-ÿ\s]+" 
+                                   placeholder="Ingresa el nombre completo del cliente"
+                                   title="Solo letras y espacios, mínimo 2 caracteres">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefonoCliente">Teléfono</label>
+                            <input type="tel" id="telefonoCliente" name="telefonoCliente" 
+                                   pattern="[0-9+\s\-]{9,15}" maxlength="15"
+                                   placeholder="Número de teléfono (opcional)"
+                                   title="Solo números, +, espacios y guiones (9-15 caracteres)">
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>✂️ Servicios</h3>
+                        <div id="services-container" class="services-grid">
+                            <div class="service-card">
+                                <div class="service-header">
+                                    <input type="checkbox" id="corte" name="servicios" value="corte" data-precio="10.00" data-duracion="30">
+                                    <label for="corte" class="service-label">
+                                        <span class="service-icon">✂️</span>
+                                        <span class="service-name">Corte de Pelo</span>
+                                    </label>
+                                </div>
+                                <div class="service-details">
+                                    <span class="service-price">10.00 €</span>
+                                    <span class="service-duration">~30 min</span>
+                                </div>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-header">
+                                    <input type="checkbox" id="barba" name="servicios" value="barba" data-precio="5.50">
+                                    <label for="barba" class="service-label">
+                                        <span class="service-icon">🧔</span>
+                                        <span class="service-name">Barba</span>
+                                    </label>
+                                </div>
+                                <div class="service-details">
+                                    <span class="service-price">5.50 €</span>
+                                    <span class="service-duration">~15 min</span>
+                                </div>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-header">
+                                    <input type="checkbox" id="afeitado" name="servicios" value="afeitado" data-precio="5.00">
+                                    <label for="afeitado" class="service-label">
+                                        <span class="service-icon">🪒</span>
+                                        <span class="service-name">Afeitado</span>
+                                    </label>
+                                </div>
+                                <div class="service-details">
+                                    <span class="service-price">5.00 €</span>
+                                    <span class="service-duration">~10 min</span>
+                                </div>
+                            </div>
+
+                            <div class="service-card">
+                                <div class="service-header">
+                                    <input type="checkbox" id="lavado" name="servicios" value="lavado" data-precio="3.00">
+                                    <label for="lavado" class="service-label">
+                                        <span class="service-icon">🚿</span>
+                                        <span class="service-name">Lavado</span>
+                                    </label>
+                                </div>
+                                <div class="service-details">
+                                    <span class="service-price">3.00 €</span>
+                                    <span class="service-duration">~5 min</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="service-summary" id="serviceSummary" style="display: none;">
+                            <div class="summary-row">
+                                <span>Total servicios:</span>
+                                <span id="totalServices">0</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Duración estimada:</span>
+                                <span id="totalDuration">0 min</span>
+                            </div>
+                            <div class="summary-row total-price-row">
+                                <span>Precio total:</span>
+                                <span id="totalPrice">0.00 €</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>📝 Observaciones</h3>
+                        <div class="form-group">
+                            <label for="observaciones">Notas adicionales</label>
+                            <textarea id="observaciones" name="observaciones" rows="4" 
+                                      maxlength="500" placeholder="Escribe cualquier información adicional sobre la cita (opcional)"></textarea>
+                            <small class="char-counter">0/500 caracteres</small>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">
+                        ← Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveButton" onclick="saveAppointment()" disabled>
+                        💾 Guardar Cita
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading overlay -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <p>Guardando cita...</p>
+            </div>
+        </div>
+
+        <!-- Success message -->
+        <div id="successMessage" class="success-message" style="display: none;">
+            <div class="success-content">
+                <div class="success-icon">✅</div>
+                <h3>¡Cita creada exitosamente!</h3>
+                <p>La cita ha sido registrada correctamente.</p>
+                <button class="btn btn-primary" onclick="goBack()">Volver al inicio</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

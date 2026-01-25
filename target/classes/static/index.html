@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Citas - Peluquería</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <script src="js/notifications.js"></script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <!-- Navegación principal -->
+    <header class="main-header">
+        <nav class="header-nav">
+            <a href="index.html" class="nav-brand">
+                <span>✂️</span>
+                <span>Sistema de Citas</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link active">🏠 Inicio</a></li>
+                <li><a href="html/historial.html" class="nav-link">📅 Historial</a></li>
+                <li><a href="#" class="nav-link" style="opacity: 0.5; cursor: not-allowed;">✂️ Servicios</a></li>
+            </ul>
+            
+            <button class="nav-toggle" id="navToggle" onclick="toggleMenu()">☰</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <header class="header">
+            <h1>Citas Pendientes</h1>
+            <p>Gestión de citas sin atender</p>
+        </header>
+
+        <div class="actions-bar">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Buscar citas..." onkeyup="searchAppointments()">
+            </div>
+            <button class="btn btn-primary" onclick="window.location.href='html/nuevaCita.html'">
+                ➕ Nueva Cita
+            </button>
+        </div>
+
+        <!-- Filtros de fecha -->
+        <div class="filters-bar">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="today" onclick="filterAppointments('today')">
+                    📅 Hoy
+                </button>
+                <button class="filter-btn" data-filter="tomorrow" onclick="filterAppointments('tomorrow')">
+                    🔜 Mañana
+                </button>
+                <button class="filter-btn" data-filter="date" onclick="showDatePicker()">
+                    📆 Otra fecha
+                </button>
+                <button class="filter-btn" data-filter="all" onclick="filterAppointments('all')">
+                    📋 Todas
+                </button>
+            </div>
+            
+            <!-- Date picker oculto -->
+            <div class="date-picker-container" id="datePickerContainer" style="display: none;">
+                <input type="date" id="customDateInput" onchange="filterAppointments('custom')">
+                <button class="btn-close-date" onclick="closeDatePicker()">✕</button>
+            </div>
+
+            <!-- Indicador de filtro actual -->
+            <div class="current-filter" id="currentFilterLabel">
+                <span>📅 Mostrando citas de: <strong>Hoy</strong></span>
+            </div>
+        </div>
+
+        <div id="loadingState" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Cargando citas...</p>
+        </div>
+
+        <div id="appointmentsContainer" class="appointments-grid">
+            <!-- Las citas se cargarán dinámicamente aquí -->
+        </div>
+
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📅</div>
+            <h3>No hay citas registradas</h3>
+            <p id="emptyStateMessage">No hay citas para la fecha seleccionada</p>
+            <button class="btn btn-primary" onclick="window.location.href='html/nuevaCita.html'" style="margin-top: 1rem;">
+                Agregar Primera Cita
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
