@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {ClienteService.class, PeluqueroService.class, CorteService.class})
 public abstract class CitaMapper {
 
     @Autowired
@@ -32,6 +32,8 @@ public abstract class CitaMapper {
 
     @Autowired
     private ModelMapper modelMapper;
+
+
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cliente", expression = "java(estabelcerCliente(dto.getCliente()))")
