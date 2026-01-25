@@ -10,6 +10,7 @@ import lombok.Data;
  * @author husnain
  */
 @Data
+@Builder
 public class ClienteRequestDto {
 
     @NotBlank(message = "{cliente.nombre.requerido}")

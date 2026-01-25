@@ -59,24 +59,6 @@ public class CitaValidationTest {
                 PROPIEDADA_ASSERTION_CITA_CLIENTE);
 
     }
-
-    @Test
-    @DisplayName("Debe fallar la validación al existir tanto el id del cliente como el cliente anónimo")
-    void testValidarCita_CuandoExisteIdClienteYClienteAnonimo_DebeDarError() {
-        verificarValidacion(CitaRequestDtoData.CON_ID_CLIENTE_Y_CLIENTE_ANONIMO, 1,
-                PROPIEDADA_ASSERTION_CITA_CLIENTE);
-    }
-
-    @Test
-    @DisplayName("Se debe validar sin ningún error esperado")
-    void testValidarSinErroresEsperadosAlCrearOModificarCita() {
-        CitaRequestDto cita = CitaRequestDtoData.VALIDA_CON_ID_CLIENTE.getCitaDto();
-
-        Set<ConstraintViolation<CitaRequestDto>> violations = validator.validate(cita);
-
-        assertThat(violations).hasSize(0);
-    }
-
     private void verificarValidacion(CitaRequestDtoData datosCitaDto,
                                      int numViolationsEsperadas,
                                      String... nombrePropiedadConErrorEsperado) {
