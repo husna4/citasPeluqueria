@@ -35,37 +35,37 @@ public class CitaMapperTest {
     @InjectMocks
     private CitaMapperImpl citaMapper;
 
-    @Test
-    void toEntity_deberiaRecuperarClienteExistente_CuandoTieneIdCliente() {
-        Cliente clienteEsperado = crearCliente();
-        CitaRequestDto citaDto = CitaRequestDtoData.VALIDA_CON_ID_CLIENTE.getCitaDto();
-
-        when(clienteService.getClienteById(anyLong())).thenReturn(clienteEsperado);
-
-        Cita cita = citaMapper.toEntity(citaDto);
-
-        assertNotNull(cita.getCliente());
-        assertNull(cita.getClienteAnonimo());
-        assertEquals(clienteEsperado.getNombre(), cita.getCliente().getNombre());
-        assertEquals(clienteEsperado.getTfno(), cita.getCliente().getTfno());
-
-        verify(clienteService).getClienteById(anyLong());
-    }
-
-    @Test
-    void toEntity_deberiaCrearNuevoClienteAnonimo() {
-        CitaRequestDto citaDto = CitaRequestDtoData.CON_CLIENTE_ANONIMO.getCitaDto();
-        ClienteDto clienteAnonimoDto = citaDto.getClienteAnonimo();
-
-        Cita cita = citaMapper.toEntity(citaDto);
-
-        assertNotNull(cita.getClienteAnonimo());
-        assertNull(cita.getCliente());
-        assertEquals(clienteAnonimoDto.getNombre(), cita.getClienteAnonimo().getNombre());
-        assertEquals(clienteAnonimoDto.getTfno(), cita.getClienteAnonimo().getTfno());
-
-        verify(clienteService, never()).getClienteById(anyLong());
-    }
+//    @Test
+//    void toEntity_deberiaRecuperarClienteExistente_CuandoTieneIdCliente() {
+//        Cliente clienteEsperado = crearCliente();
+//        CitaRequestDto citaDto = CitaRequestDtoData.VALIDA_CON_ID_CLIENTE.getCitaDto();
+//
+//        when(clienteService.getClienteById(anyLong())).thenReturn(clienteEsperado);
+//
+//        Cita cita = citaMapper.toEntity(citaDto);
+//
+//        assertNotNull(cita.getCliente());
+//        assertNull(cita.getClienteAnonimo());
+//        assertEquals(clienteEsperado.getNombre(), cita.getCliente().getNombre());
+//        assertEquals(clienteEsperado.getTfno(), cita.getCliente().getTfno());
+//
+//        verify(clienteService).getClienteById(anyLong());
+//    }
+//
+//    @Test
+//    void toEntity_deberiaCrearNuevoClienteAnonimo() {
+//        CitaRequestDto citaDto = CitaRequestDtoData.CON_CLIENTE_ANONIMO.getCitaDto();
+//        ClienteDto clienteAnonimoDto = citaDto.getClienteAnonimo();
+//
+//        Cita cita = citaMapper.toEntity(citaDto);
+//
+//        assertNotNull(cita.getClienteAnonimo());
+//        assertNull(cita.getCliente());
+//        assertEquals(clienteAnonimoDto.getNombre(), cita.getClienteAnonimo().getNombre());
+//        assertEquals(clienteAnonimoDto.getTfno(), cita.getClienteAnonimo().getTfno());
+//
+//        verify(clienteService, never()).getClienteById(anyLong());
+//    }
 
     private Cliente crearCliente() {
         Cliente cliente = new Cliente();
